@@ -1,0 +1,13 @@
+*.rdp
+*.vhd
+*.vhdx
+*.avhdx
+*.key
+*.pem
+*.pfx
+*.cer
+*.log
+*.tmp
+*transcript*
+credentials*
+secrets*
