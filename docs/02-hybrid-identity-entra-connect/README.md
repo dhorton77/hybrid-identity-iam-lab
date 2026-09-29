@@ -1,8 +1,8 @@
-\# Phase 2 — Hybrid Identity with Microsoft Entra Connect
+# Phase 2 — Hybrid Identity with Microsoft Entra Connect
 
 
 
-\## Overview
+## Overview
 
 
 
@@ -18,15 +18,15 @@ A dedicated Windows Server was used for Microsoft Entra Connect rather than inst
 
 
 
-\---
+---
 
 
 
-\## Architecture
+## Architecture
 
 
 
-\### On-Premises Environment
+### On-Premises Environment
 
 
 
@@ -50,7 +50,7 @@ A dedicated Windows Server was used for Microsoft Entra Connect rather than inst
 
 
 
-\### Cloud Identity
+### Cloud Identity
 
 
 
@@ -96,11 +96,11 @@ This separates the internal AD namespace from the externally routable identity n
 
 
 
-\---
+---
 
 
 
-\## Design and Security Decisions
+## Design and Security Decisions
 
 
 
@@ -108,7 +108,7 @@ Several controls were deliberately implemented rather than accepting broad defau
 
 
 
-\### Dedicated Synchronization Server
+### Dedicated Synchronization Server
 
 
 
@@ -120,7 +120,7 @@ This keeps synchronization services separate from the domain controller and prov
 
 
 
-\### Controlled OU Synchronization
+### Controlled OU Synchronization
 
 
 
@@ -140,7 +140,7 @@ This prevents the entire Active Directory environment from being automatically s
 
 
 
-\### Routable UPN
+### Routable UPN
 
 
 
@@ -160,7 +160,7 @@ Hybrid identities can therefore use the same routable UPN for on-premises and cl
 
 
 
-\### Password Hash Synchronization
+### Password Hash Synchronization
 
 
 
@@ -172,11 +172,11 @@ This allows users to authenticate to Microsoft Entra ID using credentials derive
 
 
 
-\---
+---
 
 
 
-\## Entra Connect Configuration
+## Entra Connect Configuration
 
 
 
@@ -188,49 +188,49 @@ The configuration included:
 
 
 
-\- Active Directory forest: `ad.sc300lab.test`
+- Active Directory forest: `ad.sc300lab.test`
 
-\- Microsoft Entra verified domain: `corp.davidboydltd.co.uk`
+- Microsoft Entra verified domain: `corp.davidboydltd.co.uk`
 
-\- Synchronization scope restricted to `Hybrid-Users`
+- Synchronization scope restricted to `Hybrid-Users`
 
-\- `userPrincipalName` used for cloud sign-in
+- `userPrincipalName` used for cloud sign-in
 
-\- Source anchor managed using `mS-DS-ConsistencyGuid`
+- Source anchor managed using `mS-DS-ConsistencyGuid`
 
-\- Password Hash Synchronization enabled
+- Password Hash Synchronization enabled
 
-\- Automatic synchronization enabled
+- Automatic synchronization enabled
 
-\- Staging mode disabled
-
-
-
-!\[OU filtering](evidence/02-ou-filtering-hybrid-users.png)
+- Staging mode disabled
 
 
 
-!\[Source anchor configuration](evidence/03-source-anchor-user-matching.png)
+![OU filtering](evidence/02-ou-filtering-hybrid-users.png)
 
 
 
-!\[Password Hash Synchronization](evidence/04-password-hash-sync-selected.png)
+![Source anchor configuration](evidence/03-source-anchor-user-matching.png)
 
 
 
-!\[Successful Entra Connect configuration](evidence/06-entra-connect-configuration-success.png)
+![Password Hash Synchronization](evidence/04-password-hash-sync-selected.png)
 
 
 
-\---
+![Successful Entra Connect configuration](evidence/06-entra-connect-configuration-success.png)
 
 
 
-\## Hybrid Identity Test
+---
 
 
 
-A test identity named \*\*Frank Castle\*\* was created in the controlled `Hybrid-Users` OU.
+## Hybrid Identity Test
+
+
+
+A test identity named **Frank Castle** was created in the controlled `Hybrid-Users` OU.
 
 
 
@@ -238,13 +238,13 @@ The account was configured with:
 
 
 
-\- `sAMAccountName`: `frank.castle`
+- `sAMAccountName`: `frank.castle`
 
-\- Routable UPN using `corp.davidboydltd.co.uk`
+- Routable UPN using `corp.davidboydltd.co.uk`
 
-\- Enabled Active Directory account
+- Enabled Active Directory account
 
-\- Password change required at first sign-in
+- Password change required at first sign-in
 
 
 
@@ -256,23 +256,23 @@ Following synchronization, Microsoft Entra ID showed the account as synchronized
 
 
 
-!\[Synchronized identity](evidence/07-frank-synced-user-list.png)
+![Synchronized identity](evidence/07-frank-synced-user-list.png)
 
 
 
-!\[Cloud identity overview](evidence/08-frank-cloud-user-overview.png)
+![Cloud identity overview](evidence/08-frank-cloud-user-overview.png)
 
 
 
-!\[On-premises synchronization properties](evidence/09-frank-on-premises-sync-properties.png)
+![On-premises synchronization properties](evidence/09-frank-on-premises-sync-properties.png)
 
 
 
-\---
+---
 
 
 
-\## Synchronization Validation
+## Synchronization Validation
 
 
 
@@ -284,15 +284,15 @@ The scheduler confirmed:
 
 
 
-\- Synchronization enabled
+- Synchronization enabled
 
-\- 30-minute synchronization interval
+- 30-minute synchronization interval
 
-\- Delta synchronization configured
+- Delta synchronization configured
 
-\- Staging mode disabled
+- Staging mode disabled
 
-\- Scheduler not suspended
+- Scheduler not suspended
 
 
 
@@ -300,9 +300,9 @@ Both synchronization connectors were also confirmed:
 
 
 
-\- Active Directory connector — `ad.sc300lab.test`
+- Active Directory connector — `ad.sc300lab.test`
 
-\- Microsoft Entra connector
+- Microsoft Entra connector
 
 
 
@@ -310,19 +310,19 @@ Synchronization run history showed successful import, synchronization, and expor
 
 
 
-!\[Synchronization scheduler](evidence/10-sync-scheduler-validation.png)
+![Synchronization scheduler](evidence/10-sync-scheduler-validation.png)
 
 
 
-!\[Synchronization connectors](evidence/11-sync-connectors-validation.png)
+![Synchronization connectors](evidence/11-sync-connectors-validation.png)
 
 
 
-\---
+---
 
 
 
-\## Password Hash Synchronization Validation
+## Password Hash Synchronization Validation
 
 
 
@@ -338,7 +338,7 @@ The tenant feature configuration returned:
 
 
 
-!\[Password Hash Sync validation](evidence/12-password-hash-sync-feature-enabled.png)
+![Password Hash Sync validation](evidence/12-password-hash-sync-feature-enabled.png)
 
 
 
@@ -358,11 +358,11 @@ This provided end-to-end validation of the hybrid authentication flow rather tha
 
 
 
-\---
+---
 
 
 
-\## MFA and Microsoft Authenticator
+## MFA and Microsoft Authenticator
 
 
 
@@ -386,7 +386,7 @@ The investigation then moved through multiple layers rather than repeatedly atte
 
 
 
-\### Authentication Method Policy
+### Authentication Method Policy
 
 
 
@@ -414,11 +414,11 @@ The Microsoft Authenticator policy was then targeted specifically at this group.
 
 
 
-!\[Authenticator pilot group](evidence/16-authenticator-pilot-group-created.png)
+![Authenticator pilot group](evidence/16-authenticator-pilot-group-created.png)
 
 
 
-!\[Authenticator pilot policy](evidence/17-authenticator-policy-pilot-targeting.png)
+![Authenticator pilot policy](evidence/17-authenticator-policy-pilot-targeting.png)
 
 
 
@@ -426,11 +426,11 @@ This follows a controlled rollout approach where authentication changes can be t
 
 
 
-\---
+---
 
 
 
-\## Security Defaults Investigation
+## Security Defaults Investigation
 
 
 
@@ -442,7 +442,7 @@ Security Defaults was confirmed as enabled and was deliberately left enabled dur
 
 
 
-!\[Security Defaults](evidence/18-security-defaults-confirmed-enabled.png)
+![Security Defaults](evidence/18-security-defaults-confirmed-enabled.png)
 
 
 
@@ -454,11 +454,11 @@ A later phase of the lab will replace Security Defaults with deliberately design
 
 
 
-\---
+---
 
 
 
-\## Authenticator Client Troubleshooting
+## Authenticator Client Troubleshooting
 
 
 
@@ -478,23 +478,23 @@ The final Microsoft Entra authentication-method state showed:
 
 
 
-\- Microsoft Authenticator registered
+- Microsoft Authenticator registered
 
-\- Authenticator notification configured as the default sign-in method
+- Authenticator notification configured as the default sign-in method
 
-\- Authenticator available as a usable authentication method
+- Authenticator available as a usable authentication method
 
-\- System-preferred MFA enabled
+- System-preferred MFA enabled
 
-\- Phone app notification selected as the system-preferred method
-
-
-
-!\[Successful cloud sign-in](evidence/19-frank-successful-cloud-sign-in.png)
+- Phone app notification selected as the system-preferred method
 
 
 
-!\[Authenticator registration validation](evidence/20-authenticator-registration-validated.png)
+![Successful cloud sign-in](evidence/19-frank-successful-cloud-sign-in.png)
+
+
+
+![Authenticator registration validation](evidence/20-authenticator-registration-validated.png)
 
 
 
@@ -502,11 +502,11 @@ The troubleshooting process was retained as part of the portfolio because diagno
 
 
 
-\---
+---
 
 
 
-\## Troubleshooting Summary
+## Troubleshooting Summary
 
 
 
@@ -514,7 +514,7 @@ This phase included several genuine implementation issues.
 
 
 
-\### Incorrect Custom Domain
+### Incorrect Custom Domain
 
 
 
@@ -538,7 +538,7 @@ The required Microsoft TXT record was added to public DNS and the domain was suc
 
 
 
-\### Entra Connect Security Context
+### Entra Connect Security Context
 
 
 
@@ -554,7 +554,7 @@ The server was then accessed using the appropriate domain security context, afte
 
 
 
-\### Microsoft Authenticator Registration
+### Microsoft Authenticator Registration
 
 
 
@@ -590,11 +590,11 @@ The failure therefore became useful troubleshooting evidence rather than being r
 
 
 
-\---
+---
 
 
 
-\## Security Principles Demonstrated
+## Security Principles Demonstrated
 
 
 
@@ -602,39 +602,39 @@ This phase applies several principles that I use throughout the lab:
 
 
 
-\*\*Least privilege\*\* — synchronize only identities that require cloud integration.
+**Least privilege** — synchronize only identities that require cloud integration.
 
 
 
-\*\*Controlled scope\*\* — use a dedicated OU instead of synchronizing the entire directory.
+**Controlled scope** — use a dedicated OU instead of synchronizing the entire directory.
 
 
 
-\*\*Defence in depth\*\* — combine directory controls, password synchronization, MFA, Security Defaults, and authentication-method governance.
+**Defence in depth** — combine directory controls, password synchronization, MFA, Security Defaults, and authentication-method governance.
 
 
 
-\*\*Default secure posture\*\* — Security Defaults remained enabled while MFA problems were investigated.
+**Default secure posture** — Security Defaults remained enabled while MFA problems were investigated.
 
 
 
-\*\*Pilot before broad deployment\*\* — Microsoft Authenticator was initially targeted to a dedicated test group.
+**Pilot before broad deployment** — Microsoft Authenticator was initially targeted to a dedicated test group.
 
 
 
-\*\*Validate rather than assume\*\* — synchronization, connectors, password hash synchronization, cloud authentication, and MFA registration were each independently tested.
+**Validate rather than assume** — synchronization, connectors, password hash synchronization, cloud authentication, and MFA registration were each independently tested.
 
 
 
-\*\*Troubleshooting with evidence\*\* — configuration failures were investigated layer by layer and retained as engineering evidence.
+**Troubleshooting with evidence** — configuration failures were investigated layer by layer and retained as engineering evidence.
 
 
 
-\---
+---
 
 
 
-\## Outcome
+## Outcome
 
 
 
@@ -654,17 +654,17 @@ The synchronized test identity was able to:
 
 
 
-\- Authenticate against on-premises Active Directory
+- Authenticate against on-premises Active Directory
 
-\- Synchronize into Microsoft Entra ID
+- Synchronize into Microsoft Entra ID
 
-\- Use the routable cloud UPN
+- Use the routable cloud UPN
 
-\- Authenticate to Microsoft cloud services using the synchronized password
+- Authenticate to Microsoft cloud services using the synchronized password
 
-\- Register Microsoft Authenticator
+- Register Microsoft Authenticator
 
-\- Complete MFA registration successfully
+- Complete MFA registration successfully
 
 
 
@@ -672,11 +672,11 @@ The environment is now ready for further SC-300 and IAM engineering work includi
 
 
 
-\---
+---
 
 
 
-\## Key Learning
+## Key Learning
 
 
 
@@ -689,4 +689,5 @@ Building the environment demonstrated how DNS, Active Directory, UPN design, Mic
 
 
 That end-to-end understanding is the foundation for the later IAM and PAM phases of this project.
+
 

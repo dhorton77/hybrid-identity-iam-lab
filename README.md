@@ -1,338 +1,306 @@
-\# Hybrid Identity \& IAM Engineering Lab
+# Hybrid Identity & IAM Engineering Lab
 
+## Overview
 
+This repository documents the design, deployment, security, troubleshooting, and validation of a hands-on **Hybrid Identity and Identity & Access Management (IAM) lab** built around Windows Server Active Directory and Microsoft Entra ID.
 
-\## Overview
+The project is designed to demonstrate practical IAM engineering capability rather than certification theory alone.
 
+It begins with an on-premises Active Directory environment and progressively introduces hybrid identity, authentication, identity lifecycle management, Conditional Access, privileged access, governance, automation, and Zero Trust security controls.
 
+Each phase follows an engineering approach:
 
-This repository documents the design, deployment, security, troubleshooting, and validation of a hands-on hybrid identity environment built around Windows Server Active Directory and Microsoft Entra ID.
+**Design → Configure → Test → Validate → Troubleshoot → Document**
 
+Failures and troubleshooting are intentionally retained where they demonstrate useful engineering knowledge.
 
+---
+
+## Current Architecture
+
+```text
+                         Microsoft Entra ID
+                                │
+                    Password Hash Synchronization
+                                │
+                         SC300-SYNC01
+                      Microsoft Entra Connect
+                                │
+                                │
+                         SC300-DC01
+                   Active Directory / DNS
+                    ad.sc300lab.test
+                         192.168.1.2
+                         /          \
+                        /            \
+                 SC300-PC01       SC300-PC02
+                 Windows 11       Windows 11
+                        \            /
+                         \          /
+                           IPFire
+                         192.168.1.1
+```
+
+### Identity Design
+
+| Component | Configuration |
+|---|---|
+| Active Directory forest | `ad.sc300lab.test` |
+| Domain Controller | `SC300-DC01` |
+| Domain Controller IP | `192.168.1.2` |
+| Entra Connect Server | `SC300-SYNC01` |
+| Windows clients | `SC300-PC01`, `SC300-PC02` |
+| Hybrid identity OU | `Hybrid-Users` |
+| Verified cloud UPN | `corp.davidboydltd.co.uk` |
+| Authentication | Password Hash Synchronization |
+| MFA | Microsoft Authenticator |
+| Firewall / Router | IPFire |
+| Lab network | `192.168.1.0/24` |
+| External DNS forwarding | Cloudflare `1.1.1.1` |
+
+The internal Active Directory namespace is deliberately separated from the routable cloud identity namespace.
+
+On-premises directory:
 
-The project demonstrates practical Identity and Access Management (IAM) engineering skills, progressing from an on-premises Active Directory foundation into hybrid identity, identity lifecycle management, Conditional Access, privileged access management, automation, and Zero Trust security controls.
+`ad.sc300lab.test`
 
+Cloud sign-in suffix:
 
+`corp.davidboydltd.co.uk`
 
-Rather than documenting configuration alone, each stage includes testing, validation, security rationale, evidence, and troubleshooting to demonstrate how the environment behaves in practice.
+---
 
+# Completed Lab Phases
 
+## Phase 1 — On-Premises Active Directory Foundation ✅
 
-\---
+Built and validated the on-premises identity foundation required for the hybrid IAM environment.
 
+### Key Engineering Work
 
+- Deployed Windows Server 2025 Active Directory Domain Services.
+- Created the `ad.sc300lab.test` Active Directory forest.
+- Configured Active Directory-integrated DNS.
+- Configured external DNS forwarding.
+- Validated DNS and LDAP service discovery.
+- Verified SYSVOL and NETLOGON.
+- Verified all five FSMO roles.
+- Diagnosed and corrected an incorrect domain controller hostname.
+- Validated Service Principal Names following the DC rename.
+- Checked the directory for duplicate SPNs.
+- Joined two Windows 11 Enterprise clients to the domain.
+- Validated domain authentication.
+- Verified domain controller discovery.
+- Validated Active Directory secure channels.
+- Captured implementation and troubleshooting evidence.
 
-\## Lab Architecture
+[View Phase 1 — On-Premises Active Directory Foundation](docs/01-on-prem-ad-foundation/README.md)
 
+---
 
+## Phase 2 — Hybrid Identity & Microsoft Entra Connect ✅
 
-The lab uses a segmented virtual network protected by IPFire and provides an on-premises Active Directory environment that will be extended into Microsoft Entra ID.
+Extended the on-premises Active Directory environment into Microsoft Entra ID using a dedicated Microsoft Entra Connect synchronization server.
 
+### Key Engineering Work
 
+- Deployed dedicated synchronization server `SC300-SYNC01`.
+- Joined the synchronization server to the Active Directory domain.
+- Validated AD DNS, LDAP, secure channel, time synchronization, and HTTPS connectivity.
+- Verified the custom domain `corp.davidboydltd.co.uk` in Microsoft Entra ID.
+- Added the routable UPN suffix to the Active Directory forest.
+- Created a dedicated `Hybrid-Users` OU.
+- Restricted Microsoft Entra Connect synchronization to the controlled OU.
+- Configured `mS-DS-ConsistencyGuid` as the source anchor.
+- Enabled Password Hash Synchronization.
+- Validated Microsoft Entra Connect scheduler and connectors.
+- Validated successful synchronization runs.
+- Synchronized an on-premises test identity into Microsoft Entra ID.
+- Proved cloud authentication using the synchronized Active Directory password.
+- Investigated MFA registration through Microsoft Entra sign-in diagnostics.
+- Created a controlled Microsoft Authenticator pilot group.
+- Targeted the Authenticator authentication method to the pilot population.
+- Diagnosed failed Authenticator enrollment.
+- Successfully registered Microsoft Authenticator after troubleshooting.
+- Validated the final authentication-method state.
 
-\- \*\*Firewall / Router:\*\* IPFire
+### Hybrid Authentication Flow
 
-\- \*\*Lab Network:\*\* 192.168.1.0/24
+```text
+On-Premises AD DS
+       │
+       ▼
+Microsoft Entra Connect
+       │
+       ▼
+Password Hash Synchronization
+       │
+       ▼
+Microsoft Entra ID
+       │
+       ▼
+Microsoft Authenticator / MFA
+```
 
-\- \*\*IPFire GREEN Interface:\*\* 192.168.1.1
+[View Phase 2 — Hybrid Identity & Microsoft Entra Connect](docs/02-hybrid-identity-entra-connect/README.md)
 
-\- \*\*Domain Controller:\*\* SC300-DC01
+---
 
-\- \*\*Domain Controller IP:\*\* 192.168.1.2
+# Engineering Approach
 
-\- \*\*Active Directory Domain:\*\* ad.sc300lab.test
+The project follows several security principles throughout the environment.
 
-\- \*\*Client 1:\*\* SC300-PC01
+### Zero Trust
 
-\- \*\*Client 2:\*\* SC300-PC02
+**Verify explicitly, use least privilege, and assume breach.**
 
-\- \*\*Sync Server:\*\* SC300-SYNC01
+Authentication and authorization decisions should be based on identity, device, location, risk, application, and other available signals rather than implicit trust.
 
-\- \*\*Client OS:\*\* Windows 11 Enterprise
+### Least Privilege
 
-\- \*\*Server OS:\*\* Windows Server 2025
+Users, administrators, applications, and workloads should receive only the access required to perform their function.
 
-\- \*\*Internal DNS:\*\* Active Directory-integrated DNS on SC300-DC01
+### Defence in Depth
 
-\- \*\*External DNS Forwarding:\*\* Cloudflare 1.1.1.1
+Identity controls are combined with network, endpoint, authentication, monitoring, and governance controls.
 
+### Default Deny
 
+Access is not assumed simply because an identity or resource exists.
 
-Domain clients use SC300-DC01 for DNS and Active Directory service discovery. External DNS queries are forwarded by the domain controller rather than configuring public DNS directly on domain clients.
+### Controlled Deployment
 
+Changes are introduced to limited scopes where possible before wider deployment.
 
+For example, Microsoft Authenticator was initially targeted to a dedicated pilot security group rather than enabled broadly without validation.
 
-\---
+### Validate Rather Than Assume
 
+Configuration is independently tested.
 
+Examples include:
 
-\## Completed Lab Work
+- DNS resolution
+- LDAP service discovery
+- Active Directory secure channels
+- Microsoft Entra Connect scheduler
+- Synchronization connectors
+- Synchronization run history
+- Password Hash Synchronization
+- Cloud authentication
+- MFA registration
 
+### Troubleshooting Is Evidence
 
+Failures are not automatically removed from the project history.
 
-\### 01 - On-Premises Active Directory Foundation
+A failed configuration can demonstrate more engineering capability than a successful wizard if the failure is systematically investigated, understood, remediated, and validated.
 
+---
 
+# Transferable Enterprise IT Experience
 
-Built and validated the on-premises identity foundation for the hybrid IAM environment.
+This project builds on **14+ years of hands-on enterprise IT experience** across field engineering, deployment, service desk, endpoint support, Active Directory administration, troubleshooting, and controlled enterprise environments.
 
+## Mobile / Field Engineering
 
+- Hardware installation, replacement, and break/fix support.
+- Desktop and laptop deployment.
+- Server and Cisco hardware replacement.
+- On-site troubleshooting and incident resolution.
+- Work within controlled enterprise change processes.
 
-\*\*Key work completed:\*\*
+## Deployment Engineering
 
+- Enterprise Windows deployment using SCCM.
+- Active Directory and domain-joined endpoint administration.
+- Hardware refresh and large-scale rollout projects.
+- Pre-deployment testing and validation.
+- Troubleshooting failed builds, applications, and device configurations.
 
+## 1st and 2nd Line Support
 
-\- Deployed Windows Server 2025 Active Directory Domain Services.
+- Windows and macOS troubleshooting.
+- Active Directory user and computer administration.
+- Authentication and password troubleshooting.
+- Group membership and security permission management.
+- Incident and service request management.
+- Root-cause investigation.
+- Escalation and collaboration with infrastructure, security, third-line teams, and external vendors.
 
-\- Created the `ad.sc300lab.test` Active Directory forest.
+## How This Transfers to IAM
 
-\- Configured AD-integrated DNS and external DNS forwarding.
+| Enterprise Experience | IAM Application |
+|---|---|
+| Active Directory administration | Identity, groups and authentication |
+| Password/account support | SSPR, MFA and authentication methods |
+| Security permissions | RBAC and least privilege |
+| User administration | Joiner-Mover-Leaver lifecycle |
+| Deployment engineering | Identity-aware endpoint lifecycle |
+| Troubleshooting | Authentication, provisioning and Conditional Access investigation |
+| Change management | Access approvals, auditing and governance |
+| Enterprise support | Understanding operational impact of security controls |
 
-\- Validated DNS and LDAP service discovery.
+The objective is to build on existing enterprise engineering experience and apply it to modern **Identity, IAM, PAM and Zero Trust architecture**.
 
-\- Verified SYSVOL and NETLOGON availability.
+---
 
-\- Verified all five FSMO roles.
+# Project Roadmap
 
-\- Identified and remediated an incorrect domain controller hostname using a supported domain controller rename process.
+### Phase 1 — On-Premises Active Directory Foundation
+**Status: Complete ✅**
 
-\- Validated SPNs following the rename and checked for duplicate SPNs.
+### Phase 2 — Hybrid Identity & Microsoft Entra Connect
+**Status: Complete ✅**
 
-\- Joined two Windows 11 Enterprise clients to the domain.
+### Upcoming Engineering Areas
 
-\- Verified domain authentication and domain controller discovery.
+- Joiner-Mover-Leaver identity lifecycle management
+- Dynamic users and groups
+- Role-Based Access Control (RBAC)
+- Self-Service Password Reset (SSPR)
+- Authentication methods and passwordless authentication
+- Conditional Access
+- Microsoft Entra ID Protection
+- User risk and sign-in risk investigation
+- Privileged Identity Management (PIM)
+- Just-In-Time privileged access
+- Entitlement Management
+- Access Packages
+- Access Reviews
+- OAuth 2.0 and OpenID Connect
+- Application registrations
+- Workload identities
+- Managed identities
+- Microsoft Graph automation
+- PowerShell identity automation
+- Privileged Access Management (PAM)
+- Identity security monitoring and remediation
 
-\- Validated the Active Directory secure channel on both clients.
+---
 
-\- Captured evidence of configuration, testing, troubleshooting, and validation.
+# Current Status
 
+The lab now has a functioning hybrid identity path between **Windows Server Active Directory and Microsoft Entra ID**.
 
+The environment has progressed from:
 
-\[View the full On-Premises AD Foundation lab](docs/01-on-prem-ad-foundation/README.md)
+```text
+Standalone Active Directory
+```
 
+to:
 
+```text
+Active Directory
+      ↓
+Microsoft Entra Connect
+      ↓
+Microsoft Entra ID
+      ↓
+Cloud Authentication
+      ↓
+Multi-Factor Authentication
+```
 
-\---
-
-
-
-\## Project Roadmap
-
-
-
-The lab will progressively extend the on-premises identity foundation into a hybrid Microsoft Entra ID environment.
-
-
-
-Planned areas include:
-
-
-
-\- Hybrid identity using Microsoft Entra Connect.
-
-\- Joiner-Mover-Leaver identity lifecycle management.
-
-\- Dynamic users and group membership.
-
-\- Role-Based Access Control (RBAC) and least privilege.
-
-\- Multi-Factor Authentication (MFA) and authentication methods.
-
-\- Self-Service Password Reset (SSPR).
-
-\- Conditional Access and Zero Trust policy design.
-
-\- Microsoft Entra ID Protection and identity risk.
-
-\- Privileged Identity Management (PIM) and Just-In-Time privileged access.
-
-\- Entitlement Management and access packages.
-
-\- Access Reviews.
-
-\- Application registrations, OAuth 2.0, and OpenID Connect.
-
-\- Workload identities and managed identities.
-
-\- Microsoft Graph and PowerShell automation.
-
-\- Privileged Access Management (PAM) scenarios.
-
-\- Identity security monitoring, investigation, and remediation.
-
-
-
-Each stage will include configuration, testing, evidence, security rationale, and troubleshooting rather than configuration alone.
-
-
-
-\---
-
-
-
-\## Transferable Enterprise IT Experience
-
-
-
-This project builds on 14+ years of hands-on enterprise IT experience. My previous roles have provided practical experience with Active Directory, endpoint deployment, user administration, troubleshooting, access permissions, and enterprise support processes that transfer directly into Identity and Access Management.
-
-
-
-\### Mobile / Field Engineer
-
-
-
-\- Hardware installation, replacement, and break/fix support.
-
-\- Desktop and laptop builds and enterprise deployments.
-
-\- Server and Cisco hardware replacement.
-
-\- On-site troubleshooting and incident resolution.
-
-\- Worked within controlled enterprise environments and change processes.
-
-
-
-\### Deployment Engineer
-
-
-
-\- Enterprise Windows deployment using SCCM.
-
-\- Active Directory and domain-joined endpoint administration.
-
-\- Hardware refresh and large-scale rollout projects.
-
-\- Pre-deployment testing and validation before production rollout.
-
-\- Troubleshooting failed builds, applications, and device configurations.
-
-
-
-\### 1st Line Support
-
-
-
-\- Troubleshooting hardware, software, authentication, password, and connectivity issues.
-
-\- Password resets and user access support.
-
-\- Incident and service request management.
-
-\- Detailed ticket documentation and issue tracking.
-
-\- Escalation of security and technical incidents when required.
-
-
-
-\### 2nd Line Support
-
-
-
-\- Advanced troubleshooting across Windows, macOS, networking, applications, and endpoints.
-
-\- Active Directory user and computer administration.
-
-\- User account, group membership, and security permission management.
-
-\- Troubleshooting authentication and access issues.
-
-\- Ownership of escalated incidents through to resolution.
-
-\- Root-cause investigation and technical problem solving.
-
-\- Collaboration with 1st line, infrastructure, security, 3rd line teams, and external vendors.
-
-
-
-\### How This Experience Transfers to IAM
-
-
-
-\- \*\*Active Directory administration\*\* → Identity, groups, authentication, and access management.
-
-\- \*\*Password and account support\*\* → SSPR, MFA, authentication methods, and identity verification.
-
-\- \*\*Security permissions\*\* → RBAC, least privilege, and access governance.
-
-\- \*\*Deployment engineering\*\* → Identity-aware endpoint onboarding and lifecycle management.
-
-\- \*\*User administration\*\* → Joiner-Mover-Leaver identity lifecycle processes.
-
-\- \*\*Technical troubleshooting\*\* → Authentication, provisioning, Conditional Access, and hybrid identity investigation.
-
-\- \*\*Change and ticket management\*\* → Controlled access, approvals, auditing, and governance.
-
-\- \*\*Enterprise support experience\*\* → Understanding the operational impact of identity and security controls on users and business services.
-
-
-
-The objective of this lab is to extend this existing enterprise experience into modern Microsoft identity engineering, hybrid identity, Zero Trust, access governance, privileged access, and automation.
-
-
-
-\---
-
-
-
-\## Engineering Approach
-
-
-
-This project follows several core security principles throughout the lab:
-
-
-
-\- \*\*Zero Trust:\*\* Verify explicitly, use least privilege, and assume breach.
-
-\- \*\*Least Privilege:\*\* Users and administrators receive only the access required for their role.
-
-\- \*\*Defence in Depth:\*\* Identity controls are combined with network, endpoint, authentication, and monitoring controls.
-
-\- \*\*Default Deny:\*\* Access is not assumed simply because an identity exists.
-
-\- \*\*Validation:\*\* Configuration is tested rather than assumed to be working.
-
-\- \*\*Troubleshooting:\*\* Failures and remediation are documented as part of the engineering process.
-
-\- \*\*Evidence:\*\* Screenshots and command output are retained to demonstrate successful implementation and validation.
-
-
-
-\---
-
-
-
-\## Current Status
-
-
-
-\*\*Phase 1 — On-Premises Active Directory Foundation:\*\* Complete
-
-
-
-The lab currently contains:
-
-
-
-\- Windows Server 2025 domain controller `SC300-DC01`
-
-\- Active Directory domain `ad.sc300lab.test`
-
-\- Windows 11 Enterprise client `SC300-PC01`
-
-\- Windows 11 Enterprise client `SC300-PC02`
-
-\- IPFire network segmentation and routing
-
-\- Active Directory-integrated DNS
-
-\- Validated domain authentication and secure channels
-
-\- `SC300-SYNC01` prepared for the next hybrid identity phase
-
-
-
-\*\*Next Phase:\*\* Microsoft Entra hybrid identity integration using Microsoft Entra Connect.
-
+The next phases will build governance and security controls on top of this identity foundation, moving from **identity synchronization** toward full **IAM and privileged-access engineering**.
