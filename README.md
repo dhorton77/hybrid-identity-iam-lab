@@ -20,25 +20,28 @@ Failures and troubleshooting are intentionally retained where they demonstrate u
 
 ```text
                          Microsoft Entra ID
-                                │
-                    Password Hash Synchronization
-                                │
-                         SC300-SYNC01
-                      Microsoft Entra Connect
-                                │
-                                │
-                         SC300-DC01
-                   Active Directory / DNS
-                    ad.sc300lab.test
-                         192.168.1.2
-                         /          \
-                        /            \
-                 SC300-PC01       SC300-PC02
-                 Windows 11       Windows 11
-                        \            /
-                         \          /
-                           IPFire
-                         192.168.1.1
+                         /              \
+                        /                \
+         Password Hash Sync              SSPR
+                      /                    \
+                     v                      v
+                SC300-SYNC01 <------ Password Writeback
+             Microsoft Entra Connect
+                       │
+                       │
+                       v
+                  SC300-DC01
+              Active Directory / DNS
+               ad.sc300lab.test
+                  192.168.1.2
+                    /       \
+                   /         \
+             SC300-PC01    SC300-PC02
+              Windows 11    Windows 11
+                   \         /
+                    \       /
+                     IPFire
+                   192.168.1.1
 ```
 
 ### Identity Design
@@ -53,6 +56,7 @@ Failures and troubleshooting are intentionally retained where they demonstrate u
 | Hybrid identity OU | `Hybrid-Users` |
 | Verified cloud UPN | `corp.davidboydltd.co.uk` |
 | Authentication | Password Hash Synchronization |
+| Password recovery | SSPR with Password Writeback |
 | MFA | Microsoft Authenticator |
 | Firewall / Router | IPFire |
 | Lab network | `192.168.1.0/24` |
@@ -146,6 +150,57 @@ Microsoft Authenticator / MFA
 
 ---
 
+## Phase 3 — Self-Service Password Reset & Password Writeback ✅
+
+Implemented and validated Self-Service Password Reset (SSPR) for a synchronized hybrid identity, including secure password writeback to on-premises Active Directory.
+
+### Key Engineering Work
+
+- Created dedicated `SG-SSPR-Pilot` security group.
+- Scoped SSPR to a controlled pilot population.
+- Validated Microsoft Authenticator as the user's verification method.
+- Reviewed SSPR registration settings.
+- Identified the initial absence of a password-writeback-capable agent.
+- Reconfigured Microsoft Entra Connect Sync to enable Password Writeback.
+- Preserved the existing Password Hash Synchronization and OU filtering configuration.
+- Validated that Microsoft Entra detected the on-premises writeback client.
+- Performed an end-to-end SSPR password reset.
+- Verified the password change directly in on-premises Active Directory using `PasswordLastSet`.
+- Validated the new credentials against the `SC300-DC01` NETLOGON share.
+- Avoided granting unnecessary Remote Desktop or domain-controller logon rights solely for testing.
+- Captured implementation, troubleshooting, and validation evidence.
+
+### Hybrid Password Recovery Flow
+
+```text
+Microsoft Entra SSPR
+        │
+        ▼
+Microsoft Authenticator
+        │
+        ▼
+Identity Verification
+        │
+        ▼
+Password Reset
+        │
+        ▼
+Password Writeback
+        │
+        ▼
+Microsoft Entra Connect Sync
+        │
+        ▼
+On-Premises Active Directory
+        │
+        ▼
+Domain Authentication
+```
+
+[View Phase 3 — SSPR & Password Writeback](docs/03-sspr-password-writeback/README.md)
+
+---
+
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -160,6 +215,8 @@ Authentication and authorization decisions should be based on identity, device, 
 
 Users, administrators, applications, and workloads should receive only the access required to perform their function.
 
+The SSPR validation deliberately avoided granting the test identity additional interactive or Remote Desktop logon rights purely to make a test succeed.
+
 ### Defence in Depth
 
 Identity controls are combined with network, endpoint, authentication, monitoring, and governance controls.
@@ -172,7 +229,11 @@ Access is not assumed simply because an identity or resource exists.
 
 Changes are introduced to limited scopes where possible before wider deployment.
 
-For example, Microsoft Authenticator was initially targeted to a dedicated pilot security group rather than enabled broadly without validation.
+Examples include:
+
+- Microsoft Authenticator targeted to a dedicated pilot security group.
+- SSPR targeted to the dedicated `SG-SSPR-Pilot` group.
+- Microsoft Entra Connect synchronization restricted to the `Hybrid-Users` OU.
 
 ### Validate Rather Than Assume
 
@@ -189,12 +250,24 @@ Examples include:
 - Password Hash Synchronization
 - Cloud authentication
 - MFA registration
+- SSPR identity verification
+- Password Writeback
+- Active Directory `PasswordLastSet`
+- Authentication against an on-premises domain resource
 
 ### Troubleshooting Is Evidence
 
 Failures are not automatically removed from the project history.
 
 A failed configuration can demonstrate more engineering capability than a successful wizard if the failure is systematically investigated, understood, remediated, and validated.
+
+Examples captured in the lab include:
+
+- Active Directory DNS and domain-controller configuration.
+- Microsoft Authenticator registration failure and remediation.
+- Password Writeback initially not being detected.
+- Domain-controller availability affecting Microsoft Entra Connect.
+- Distinguishing authentication failure from Windows logon-right authorization.
 
 ---
 
@@ -253,12 +326,14 @@ The objective is to build on existing enterprise engineering experience and appl
 ### Phase 2 — Hybrid Identity & Microsoft Entra Connect
 **Status: Complete ✅**
 
+### Phase 3 — Self-Service Password Reset & Password Writeback
+**Status: Complete ✅**
+
 ### Upcoming Engineering Areas
 
 - Joiner-Mover-Leaver identity lifecycle management
 - Dynamic users and groups
 - Role-Based Access Control (RBAC)
-- Self-Service Password Reset (SSPR)
 - Authentication methods and passwordless authentication
 - Conditional Access
 - Microsoft Entra ID Protection
@@ -281,7 +356,7 @@ The objective is to build on existing enterprise engineering experience and appl
 
 # Current Status
 
-The lab now has a functioning hybrid identity path between **Windows Server Active Directory and Microsoft Entra ID**.
+The lab now has a functioning **bidirectional hybrid identity workflow** between Windows Server Active Directory and Microsoft Entra ID.
 
 The environment has progressed from:
 
@@ -296,11 +371,33 @@ Active Directory
       ↓
 Microsoft Entra Connect
       ↓
+Password Hash Synchronization
+      ↓
 Microsoft Entra ID
       ↓
 Cloud Authentication
       ↓
-Multi-Factor Authentication
+Microsoft Authenticator / MFA
 ```
 
-The next phases will build governance and security controls on top of this identity foundation, moving from **identity synchronization** toward full **IAM and privileged-access engineering**.
+and now also supports the reverse password recovery path:
+
+```text
+Microsoft Entra SSPR
+      ↓
+Microsoft Authenticator Verification
+      ↓
+Password Reset
+      ↓
+Password Writeback
+      ↓
+Microsoft Entra Connect Sync
+      ↓
+On-Premises Active Directory
+      ↓
+Domain Authentication
+```
+
+The first three phases establish a working hybrid identity foundation with synchronized identities, cloud authentication, MFA, SSPR, and on-premises password writeback.
+
+The next phases will build identity lifecycle, access control, risk-based security, governance, privileged access, application identity, and automation on top of this foundation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.

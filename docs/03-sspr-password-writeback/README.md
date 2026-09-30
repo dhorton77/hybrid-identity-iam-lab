@@ -1,600 +1,226 @@
-\# Phase 3 — Self-Service Password Reset (SSPR) and Password Writeback
+# Phase 3 — Self-Service Password Reset (SSPR) and Password Writeback
 
+## Overview
 
+This phase implements and validates Microsoft Entra Self-Service Password Reset (SSPR) in a hybrid identity environment.
 
-\## Objective
+The objective was to allow a synchronized user to securely reset their password through Microsoft Entra ID using Microsoft Authenticator, while ensuring the new password was written back to the on-premises Active Directory environment.
 
+The implementation was deliberately scoped to a pilot security group before wider deployment.
 
+## Architecture
 
-Implement and validate Self-Service Password Reset (SSPR) for a controlled group of hybrid users, including password writeback from Microsoft Entra ID to the on-premises Active Directory environment.
+```text
+Frank Castle
+     |
+     v
+Microsoft Entra SSPR
+     |
+     | Identity verification
+     v
+Microsoft Authenticator
+     |
+     | New password
+     v
+Microsoft Entra ID
+     |
+     | Password Writeback
+     v
+Microsoft Entra Connect Sync
+     |
+     v
+On-Premises Active Directory
+     |
+     v
+SC300-PC01 Domain Authentication
+```
 
+## Objectives
 
+- Configure SSPR for a controlled pilot group.
+- Use Microsoft Authenticator as the verification method.
+- Enable password writeback through Microsoft Entra Connect Sync.
+- Allow a synchronized hybrid identity to reset its password from the cloud.
+- Verify that the password change reaches on-premises Active Directory.
+- Prove that the new password can authenticate against the on-premises domain.
 
-The goal was to demonstrate an end-to-end hybrid identity recovery workflow:
-
-
-
-\*\*User → Microsoft Entra SSPR → Microsoft Authenticator verification → Password reset → Microsoft Entra Connect Sync → Password writeback → On-premises Active Directory\*\*
-
-
-
-The implementation was deliberately scoped to a pilot group before wider deployment.
-
-
-
-\---
-
-
-
-\## Environment
-
-
-
-| Component | Configuration |
-
-|---|---|
-
-| On-premises AD DS | `ad.sc300lab.test` |
-
-| Domain Controller | `SC300-DC01` |
-
-| Entra Connect Server | `SC300-SYNC01` |
-
-| Domain Client | `SC300-PC01` |
-
-| Hybrid test identity | `frank.castle@corp.davidboydltd.co.uk` |
-
-| SSPR scope | `SG-SSPR-Pilot` |
-
-| Authentication method | Microsoft Authenticator |
-
-| Synchronization | Microsoft Entra Connect Sync |
-
-| Authentication sync | Password Hash Synchronization |
-
-| Password recovery | SSPR with Password Writeback |
-
-
-
-\---
-
-
-
-\## Design
-
-
-
-SSPR was not enabled tenant-wide during initial testing.
-
-
+## Pilot Deployment
 
 A dedicated security group was created:
 
-
-
 `SG-SSPR-Pilot`
 
+The synchronized test identity:
 
+`frank.castle@corp.davidboydltd.co.uk`
 
-The hybrid test account \*\*Frank Castle\*\* was added to this group.
+was added to the group.
 
+SSPR was configured using **Selected** scope rather than enabling the feature for the entire tenant.
 
+This demonstrates a controlled rollout approach where identity features can be tested with a limited population before broader deployment.
 
-This provided a controlled deployment model where SSPR functionality could be configured and validated with a limited scope before considering broader rollout.
+## Authentication Method
 
+Microsoft Authenticator was used to verify the user's identity during the password reset process.
 
+The test user had previously registered Microsoft Authenticator and was targeted by the tenant's Authenticator pilot policy.
 
-This approach reflects the principle of:
+During SSPR, Microsoft Entra required the user to approve a notification in the registered Authenticator application before allowing a new password to be created.
 
+## Initial Hybrid Limitation
 
+Before password writeback was configured, Microsoft Entra reported that no agent capable of performing password writeback had been detected.
 
-\*\*Pilot → Validate → Monitor → Expand\*\*
+This provided a useful troubleshooting scenario and demonstrated an important distinction:
 
+**SSPR enables the user reset experience, while password writeback enables a cloud-initiated password change to be written back to on-premises Active Directory.**
 
+## Password Writeback Configuration
 
-\---
+Microsoft Entra Connect Sync was reconfigured on:
 
+`SC300-SYNC01`
 
+The existing configuration was retained, including:
 
-\## 1. Configure SSPR Pilot Scope
+- Password Hash Synchronization
+- Selected OU synchronization
+- Hybrid identity synchronization
 
+The **Password writeback** optional feature was then enabled.
 
+After configuration completed successfully, Microsoft Entra detected the on-premises writeback client and reported:
 
-Self-Service Password Reset was configured for \*\*Selected\*\* users rather than the entire tenant.
+`Your on-premises writeback client is up and running.`
 
+## End-to-End SSPR Test
 
+The synchronized test user initiated account recovery using the Microsoft work or school account recovery process.
 
-The selected group was:
-
-
-
-`SG-SSPR-Pilot`
-
-
-
-This allowed SSPR testing without affecting every user in the environment.
-
-
-
-\### Evidence
-
-
-
-!\[SSPR pilot group selected](evidence/01-sspr-pilot-group-selected.png)
-
-
-
-!\[SSPR policy saved](evidence/02-sspr-policy-saved.png)
-
-
-
-\---
-
-
-
-\## 2. Review Authentication Methods
-
-
-
-The Microsoft Entra unified Authentication Methods policy was reviewed before testing SSPR.
-
-
-
-Microsoft Authenticator was already enabled for a controlled authentication-method pilot group containing the test identity.
-
-
-
-The test user had previously registered Microsoft Authenticator successfully.
-
-
-
-\### Evidence
-
-
-
-!\[Authentication methods policy](evidence/03-authentication-methods-policy.png)
-
-
-
-\---
-
-
-
-\## 3. Review SSPR Registration Policy
-
-
-
-The SSPR registration configuration was reviewed.
-
-
-
-The environment was configured to require users to register authentication information when signing in.
-
-
-
-Authentication information was configured for periodic reconfirmation.
-
-
-
-\### Evidence
-
-
-
-!\[SSPR registration settings](evidence/04-sspr-registration-settings.png)
-
-
-
-\---
-
-
-
-\## 4. Identify Missing Password Writeback Capability
-
-
-
-Before enabling password writeback, the Microsoft Entra Password Reset \*\*On-premises integration\*\* page reported that no writeback-capable agent was detected.
-
-
-
-This provided a useful baseline and demonstrated that enabling SSPR alone does not provide hybrid password writeback.
-
-
-
-\### Evidence
-
-
-
-!\[Password writeback not detected](evidence/05-password-writeback-not-detected-before.png)
-
-
-
-\---
-
-
-
-\## 5. Enable Password Writeback in Microsoft Entra Connect Sync
-
-
-
-Microsoft Entra Connect Sync was opened on `SC300-SYNC01`.
-
-
-
-The existing synchronization configuration was retained, including:
-
-
-
-\- Password Hash Synchronization
-
-\- Existing Active Directory connector
-
-\- Existing Microsoft Entra connector
-
-\- Selected OU synchronization scope
-
-
-
-Under \*\*Optional features\*\*, \*\*Password writeback\*\* was enabled.
-
-
-
-\### Before
-
-
-
-!\[Optional features before password writeback](evidence/06-connect-optional-features-before.png)
-
-
-
-\### Password Writeback Selected
-
-
-
-!\[Password writeback selected](evidence/07-password-writeback-selected.png)
-
-
-
-\### Configuration Review
-
-
-
-Before committing the change, the wizard confirmed that it would:
-
-
-
-\- Enable Password Writeback
-
-\- Configure synchronization services
-
-\- Start synchronization after configuration
-
-
-
-!\[Ready to enable password writeback](evidence/08-ready-to-enable-password-writeback.png)
-
-
-
-\### Configuration Complete
-
-
-
-Microsoft Entra Connect Sync completed the configuration successfully.
-
-
-
-!\[Microsoft Entra Connect configuration complete](evidence/09-connect-configuration-complete.png)
-
-
-
-\---
-
-
-
-\## 6. Validate On-Premises Integration
-
-
-
-After enabling Password Writeback, the Microsoft Entra Password Reset portal was checked again.
-
-
-
-The previous warning was replaced with:
-
-
-
-\*\*Your on-premises writeback client is up and running.\*\*
-
-
-
-Microsoft Entra Connect Sync showed:
-
-
-
-\*\*Status: Set up complete\*\*
-
-
-
-Password writeback for synchronized users was enabled.
-
-
-
-\### Evidence
-
-
-
-!\[Password writeback client running](evidence/10-password-writeback-client-running.png)
-
-
-
-This confirmed that Microsoft Entra could detect the on-premises password writeback capability.
-
-
-
-\---
-
-
-
-\## 7. Perform End-to-End SSPR Test
-
-
-
-A fresh browser session was used to test the user recovery experience.
-
-
-
-The recovery process was started using Microsoft's account recovery workflow.
-
-
-
-\### Start SSPR
-
-
-
-!\[SSPR sign-in start](evidence/11-sspr-signin-start.png)
-
-
-
-\### Select Work or School Account
-
-
-
-!\[Work or school account recovery](evidence/12-work-school-account-recovery.png)
-
-
-
-\### Identify Hybrid User
-
-
-
-The synchronized hybrid identity was supplied to the SSPR service.
-
-
-
-!\[SSPR account identification](evidence/13-sspr-account-identification.png)
-
-
-
-\---
-
-
-
-\## 8. Verify Identity with Microsoft Authenticator
-
-
-
-Microsoft Entra identified Microsoft Authenticator as an available verification method for the test user.
-
-
-
-The user approved the authentication request using the registered Microsoft Authenticator device.
-
-
-
-\### Evidence
-
-
-
-!\[Authenticator verification method](evidence/14-authenticator-verification-method.png)
-
-
-
-Successful verification allowed the user to proceed to the password reset stage.
-
-
-
-!\[Choose new password](evidence/15-sspr-new-password-screen.png)
-
-
-
-No passwords, QR codes, MFA secrets, or authentication tokens are stored in this repository.
-
-
-
-\---
-
-
-
-\## 9. Successful Password Reset
-
-
-
-A new password meeting the Active Directory password requirements was entered through the Microsoft SSPR portal.
-
-
-
-Microsoft reported:
-
-
-
-\*\*Your password has been reset\*\*
-
-
-
-\### Evidence
-
-
-
-!\[SSPR password reset successful](evidence/16-sspr-password-reset-success.png)
-
-
-
-At this stage the cloud workflow had succeeded, but additional validation was performed to confirm that the change had actually reached the on-premises Active Directory environment.
-
-
-
-\---
-
-
-
-\## 10. Validate Password Writeback in Active Directory
-
-
-
-The test user's Active Directory object was queried directly on `SC300-DC01`.
-
-
-
-The `PasswordLastSet` property showed a new timestamp corresponding with the SSPR operation.
-
-
-
-\### Evidence
-
-
-
-!\[On-premises PasswordLastSet proof](evidence/17-onprem-passwordlastset-proof.png)
-
-
-
-This demonstrated that the password change had reached the on-premises Active Directory account.
-
-
-
-\---
-
-
-
-\## 11. Validate New Credentials Against an On-Premises Resource
-
-
-
-An additional authentication test was performed from `SC300-PC01`.
-
-
-
-A network-only credential context was created for:
-
-
-
-`SC300LAB\\frank.castle`
-
-
-
-\### Evidence
-
-
-
-!\[Frank network authentication](evidence/18-frank-netonly-authentication.png)
-
-
-
-The credential context was then used to access the domain controller's `NETLOGON` share:
-
-
-
-`\\\\SC300-DC01\\NETLOGON`
-
-
-
-The directory was successfully accessed.
-
-
-
-\### Evidence
-
-
-
-!\[NETLOGON access proof](evidence/19-netlogon-access-proof.png)
-
-
-
-This provided end-to-end validation that the new credentials could authenticate against an on-premises domain resource.
-
-
-
-\---
-
-
-
-\## End-to-End Result
-
-
-
-The completed workflow was:
-
-
+The workflow was:
 
 ```text
+Identify account
+      ↓
+Verify identity with Microsoft Authenticator
+      ↓
+Choose a new password
+      ↓
+Microsoft Entra accepts password reset
+      ↓
+Password writeback sends change on-premises
+      ↓
+Active Directory password is updated
+```
 
-Hybrid User
+Microsoft Entra confirmed:
 
-&#x20;   |
+`Your password has been reset`
 
-&#x20;   v
+## On-Premises Validation
 
+The reset was not considered complete based only on the Microsoft Entra success message.
+
+The on-premises Active Directory account was checked directly on `SC300-DC01`.
+
+The `PasswordLastSet` value for `frank.castle` showed the password had been changed at the time of the SSPR operation.
+
+This provided direct evidence that password writeback had successfully reached Active Directory.
+
+## Authentication Validation
+
+A second validation was performed from domain-joined workstation:
+
+`SC300-PC01`
+
+Using the new password created through SSPR, the test identity successfully authenticated against the domain using:
+
+`SC300LAB\frank.castle`
+
+Access to the domain controller's `NETLOGON` share was also successfully performed under the user's security context.
+
+This demonstrated that the password reset had propagated through the complete hybrid identity path rather than existing only in Microsoft Entra ID.
+
+## Result
+
+The final identity flow was successfully validated:
+
+```text
 Microsoft Entra SSPR
-
-&#x20;   |
-
-&#x20;   v
-
-Microsoft Authenticator
-
-&#x20;   |
-
-&#x20;   v
-
-Identity Verification
-
-&#x20;   |
-
-&#x20;   v
-
-New Password
-
-&#x20;   |
-
-&#x20;   v
-
-Microsoft Entra ID
-
-&#x20;   |
-
-&#x20;   v
-
+        ↓
+Microsoft Authenticator verification
+        ↓
+Password reset
+        ↓
 Password Writeback
-
-&#x20;   |
-
-&#x20;   v
-
+        ↓
 Microsoft Entra Connect Sync
-
-&#x20;   |
-
-&#x20;   v
-
+        ↓
 On-Premises Active Directory
+        ↓
+Successful domain authentication
+```
 
-&#x20;   |
+## Security and IAM Principles Demonstrated
 
-&#x20;   v
+This phase demonstrates several practical IAM concepts:
 
-SC300-DC01
+- Self-Service Password Reset
+- Hybrid identity
+- Password writeback
+- Password Hash Synchronization
+- Authentication method registration
+- Microsoft Authenticator
+- Pilot-group deployment
+- Least-privilege rollout strategy
+- Identity verification
+- Hybrid authentication troubleshooting
+- End-to-end technical validation
 
-&#x20;   |
+## Engineering Approach
 
-&#x20;   v
+The implementation followed a controlled engineering process:
 
-Domain Authentication Successful
+**Design → Configure → Test → Troubleshoot → Validate → Document**
 
+Rather than relying solely on portal success messages, the implementation was validated at multiple layers:
+
+**Cloud configuration → Entra Connect → Active Directory → Domain authentication**
+
+This provides evidence that the complete hybrid identity workflow operated successfully.
+
+## Evidence
+
+The `evidence` directory contains screenshots covering the implementation from initial configuration through final validation.
+
+Evidence includes:
+
+- SSPR pilot group targeting
+- SSPR policy configuration
+- Authentication method policy
+- Registration settings
+- Initial password writeback detection failure
+- Microsoft Entra Connect optional features
+- Password writeback selection
+- Successful Entra Connect configuration
+- Writeback client detected and running
+- SSPR account recovery
+- Microsoft Authenticator verification
+- Password reset workflow
+- Successful SSPR completion
+- On-premises `PasswordLastSet` validation
+- Domain authentication using the new password
+- NETLOGON access under the synchronized user's identity
+
+See the [evidence directory](./evidence/) for the complete implementation record.
+
+## Key Learning
+
+This lab demonstrates that SSPR in a hybrid environment is more than enabling a cloud setting.
+
+A successful implementation requires the identity, authentication method, SSPR policy, synchronization infrastructure, password writeback capability, and on-premises Active Directory environment to work together.
+
+The most important validation was therefore not the green success message in Microsoft Entra.
+
+It was proving that a password created through cloud SSPR could ultimately authenticate the same synchronized identity against the on-premises Active Directory domain.
