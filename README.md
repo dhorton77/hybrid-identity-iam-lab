@@ -201,6 +201,51 @@ Domain Authentication
 
 ---
 
+## Phase 4 — Identity Governance & Application RBAC ✅
+
+Implemented attribute-driven access management using Microsoft Entra dynamic security groups and application-specific role assignments. Tested automated entitlement provisioning and removal during an employee department transfer.
+
+### Key Engineering Work
+
+- Created dynamic security groups `SG-IT-Operations-Dynamic` and `SG-Finance-Dynamic` based on synchronized department attributes.
+- Registered the single-tenant `SC300-Finance-Portal` application.
+- Defined distinct `Finance.Reader` and `Finance.Approver` application roles.
+- Configured the enterprise application with **Assignment required = Yes**.
+- Assigned `SG-Finance-Dynamic` to **Finance Reader**, without automatically granting Approver.
+- Changed a test user's department in on-premises Active Directory and triggered an Entra Connect delta sync.
+- Verified the resulting dynamic group membership and inherited Finance Reader application assignment.
+- Moved the user back to IT Operations and verified that the Finance Portal assignment was no longer listed.
+- Captured 36 screenshots covering configuration, synchronization, assignment, and removal.
+
+### Automated Application Entitlement Flow
+
+```text
+On-Premises Active Directory
+    Department attribute
+           |
+           v
+Microsoft Entra Connect Sync
+           |
+           v
+Microsoft Entra ID
+    Dynamic security group
+           |
+           v
+SC300-Finance-Portal
+    Finance Reader entitlement
+           |
+           v
+Department change out of Finance
+    -> Group eligibility removed
+    -> Inherited entitlement removed
+```
+
+**Scope of validation:** Entra group membership and application role *entitlements* were verified. A working Finance Portal, in-app role enforcement, sign-in denial, and active token/session revocation have **not** yet been tested.
+
+[View Phase 4 — Identity Governance & Application RBAC](docs/04-identity-governance-app-rbac/README.md)
+
+---
+
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -329,13 +374,18 @@ The objective is to build on existing enterprise engineering experience and appl
 ### Phase 3 — Self-Service Password Reset & Password Writeback
 **Status: Complete ✅**
 
+### Phase 4 — Identity Governance & Application RBAC
+**Status: Complete ✅**
+
+### Phase 5 — Conditional Access & Zero Trust
+**Status: Planned**
+
 ### Upcoming Engineering Areas
 
-- Joiner-Mover-Leaver identity lifecycle management
-- Dynamic users and groups
-- Role-Based Access Control (RBAC)
+- Conditional Access policy design and validation
+- Joiner-Mover-Leaver lifecycle expansion
+- Application role enforcement with OpenID Connect
 - Authentication methods and passwordless authentication
-- Conditional Access
 - Microsoft Entra ID Protection
 - User risk and sign-in risk investigation
 - Privileged Identity Management (PIM)
@@ -344,7 +394,7 @@ The objective is to build on existing enterprise engineering experience and appl
 - Access Packages
 - Access Reviews
 - OAuth 2.0 and OpenID Connect
-- Application registrations
+- Application authentication and authorisation testing
 - Workload identities
 - Managed identities
 - Microsoft Graph automation
@@ -398,6 +448,6 @@ On-Premises Active Directory
 Domain Authentication
 ```
 
-The first three phases establish a working hybrid identity foundation with synchronized identities, cloud authentication, MFA, SSPR, and on-premises password writeback.
+The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
-The next phases will build identity lifecycle, access control, risk-based security, governance, privileged access, application identity, and automation on top of this foundation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
+Phase 4 extends this foundation to automated application entitlements. Next, Phase 5 will introduce Conditional Access and Zero Trust policy testing, followed by deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
