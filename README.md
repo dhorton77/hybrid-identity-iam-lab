@@ -1,5 +1,7 @@
 # Hybrid Identity & IAM Engineering Lab
 
+An enterprise-ready IAM portfolio lab, showcasing hands-on implementations of JML, Conditional Access, PIM, and more—highlighting best practices in identity security and governance.
+
 ## Overview
 
 This repository documents the design, deployment, security, troubleshooting, and validation of a hands-on **Hybrid Identity and Identity & Access Management (IAM) lab** built around Windows Server Active Directory and Microsoft Entra ID.
