@@ -1,6 +1,6 @@
 # Hybrid Identity & IAM Engineering Lab
 
-An enterprise-ready IAM portfolio lab, showcasing hands-on implementations of JML, Conditional Access, PIM, and more—highlighting best practices in identity security and governance.
+
 
 ## Overview
 
