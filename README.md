@@ -248,6 +248,23 @@ Department change out of Finance
 
 ---
 
+## Phase 5 — Conditional Access, MFA & SAML SSO 🧪
+
+Extended the hybrid identity lab with SAML single sign-on, multi-factor authentication testing, and Conditional Access policy evaluation. **SAML SSO and MFA were tested successfully; Conditional Access enforcement remains unverified because the policies were evaluated in Report-only mode.**
+
+### Key Engineering Work
+
+- Configured the Microsoft Entra SAML Toolkit enterprise application and tested SAML SSO with a synchronized Finance identity.
+- Validated Finance dynamic-group membership and application assignment using the synchronized department attribute.
+- Verified MFA during sign-in and tested emergency administrator access.
+- Configured administrator, Finance application, and all-user MFA Conditional Access policies, plus a legacy authentication blocking policy.
+- Reviewed Report-only sign-in results, including cases where Conditional Access was not applied.
+- Documented the validation boundary and captured 91 screenshots for review.
+
+[View Phase 5 — Conditional Access, MFA & SAML SSO](docs/05-conditional-access-saml/README.md) · [View screenshot evidence index](docs/05-conditional-access-saml/EVIDENCE-INDEX.md)
+
+---
+
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -462,10 +479,3 @@ Domain Authentication
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
 Phase 4 extends this foundation to automated application entitlements. Phase 5 adds SAML SSO, MFA testing, emergency access validation, and Conditional Access Report-only evaluation. Enforced Conditional Access remains to be validated; later work includes deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
----
-
-## Phase 5 — Conditional Access, MFA & SAML SSO ✅
-
-Configured a SAML gallery enterprise application, assigned a synchronized Finance user through a dynamic security group, and verified successful SAML sign-in and MFA. Created Conditional Access policies for administrator MFA, user MFA, Finance application access, and legacy authentication blocking. Evaluated Report-only results and verified emergency administrator access. Enforcement is documented separately from successful MFA and SSO testing.
-
-[View Phase 5 — Conditional Access, MFA & SAML SSO](docs/05-conditional-access-saml/README.md)
