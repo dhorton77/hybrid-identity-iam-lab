@@ -31,9 +31,7 @@ Validate a hybrid-synced identity's access to a real SAML enterprise application
 The original `SC300-Finance-Portal` app registration was not a functioning sign-in application, so a gallery SAML test application was used instead. Separate browser sessions helped avoid cached sign-in state during verification.
 
 ## Evidence
-Screenshots captured on 10 October 2026 are prepared for review and upload under:
-
-`evidence/conditional-access-2026-10-10/`
+91 screenshots captured on 10 October 2026 are stored in the [Phase 5 evidence folder](./evidence/). Browse the [screenshot evidence index](./EVIDENCE-INDEX.md) for individual links.
 
 **Security note:** Screenshots must be reviewed for tenant identifiers, email addresses, user IDs and other sensitive details before publishing. A header mask alone is not full sanitization.
 
