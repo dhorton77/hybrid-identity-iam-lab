@@ -453,3 +453,10 @@ Domain Authentication
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
 Phase 4 extends this foundation to automated application entitlements. Next, Phase 5 will introduce Conditional Access and Zero Trust policy testing, followed by deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
+---
+
+## Phase 5 — Conditional Access, MFA & SAML SSO ✅
+
+Configured a SAML gallery enterprise application, assigned a synchronized Finance user through a dynamic security group, and verified successful SAML sign-in and MFA. Created Conditional Access policies for administrator MFA, user MFA, Finance application access, and legacy authentication blocking. Evaluated Report-only results and verified emergency administrator access. Enforcement is documented separately from successful MFA and SSO testing.
+
+[View Phase 5 — Conditional Access, MFA & SAML SSO](docs/05-conditional-access-saml/README.md)
