@@ -379,8 +379,10 @@ The objective is to build on existing enterprise engineering experience and appl
 ### Phase 4 — Identity Governance & Application RBAC
 **Status: Complete ✅**
 
-### Phase 5 — Conditional Access & Zero Trust
-**Status: Planned**
+### Phase 5 — Conditional Access, MFA & SAML SSO
+**Status: SAML SSO and MFA tested; Conditional Access evaluated in Report-only (enforcement not yet verified)**
+
+[Phase 5 implementation and evidence](docs/05-conditional-access-saml/README.md)
 
 ### Upcoming Engineering Areas
 
@@ -452,7 +454,7 @@ Domain Authentication
 
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
-Phase 4 extends this foundation to automated application entitlements. Next, Phase 5 will introduce Conditional Access and Zero Trust policy testing, followed by deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
+Phase 4 extends this foundation to automated application entitlements. Phase 5 adds SAML SSO, MFA testing, emergency access validation, and Conditional Access Report-only evaluation. Enforced Conditional Access remains to be validated; later work includes deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
 ---
 
 ## Phase 5 — Conditional Access, MFA & SAML SSO ✅
