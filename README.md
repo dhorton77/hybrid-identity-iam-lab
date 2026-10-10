@@ -382,7 +382,14 @@ The objective is to build on existing enterprise engineering experience and appl
 ### Phase 5 — Conditional Access, MFA & SAML SSO
 **Status: SAML SSO and MFA tested; Conditional Access evaluated in Report-only (enforcement not yet verified)**
 
-[Phase 5 implementation and evidence](docs/05-conditional-access-saml/README.md)
+- Validated SAML single sign-on to the Microsoft Entra SAML Toolkit enterprise application with a hybrid-synced Finance test identity.
+- Confirmed dynamic group membership and application assignment based on the synchronized Finance department attribute.
+- Tested MFA during the application sign-in flow and verified emergency administrator access.
+- Evaluated Conditional Access policies for administrator MFA, Finance application MFA, all-user MFA, and legacy authentication blocking in Report-only mode.
+- **Validation boundary:** Report-only results do not prove that enforced Conditional Access MFA is working; enforcement remains to be tested.
+- Captured 91 screenshots documenting the configuration and test results.
+
+**Documentation:** [Phase 5 implementation and results](docs/05-conditional-access-saml/README.md) · [Screenshot evidence index](docs/05-conditional-access-saml/EVIDENCE-INDEX.md)
 
 ### Upcoming Engineering Areas
 
