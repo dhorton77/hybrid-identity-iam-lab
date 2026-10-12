@@ -265,6 +265,26 @@ Extended the hybrid identity lab with SAML single sign-on, multi-factor authenti
 
 ---
 
+## Phase 6 — Azure Key Vault & RBAC ✅
+
+Implemented identity-based secret access using Microsoft Entra ID and Azure role-based access control.
+
+### Key Engineering Work
+
+- Deployed Azure Key Vault in UK South.
+- Enabled Azure RBAC for secret access.
+- Assigned Frank Castle Key Vault Secrets User and Reader at vault scope.
+- Assigned David-User Key Vault Secrets Officer.
+- Created an enabled dummy test secret.
+- Successfully retrieved the secret using Frank's account.
+- Documented the public network access limitation associated with dynamic IP connectivity.
+- Captured 28 screenshots documenting configuration and testing.
+
+**Validation:** Frank successfully retrieved the test secret value. Network isolation and explicit denial of modification permissions were not independently tested.
+
+[View Phase 6 — Azure Key Vault & RBAC](docs/06-azure-key-vault/README.md) · [View screenshot evidence index](docs/06-azure-key-vault/EVIDENCE-INDEX.md)
+
+---
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -408,6 +428,14 @@ The objective is to build on existing enterprise engineering experience and appl
 
 **Documentation:** [Phase 5 implementation and results](docs/05-conditional-access-saml/README.md) · [Screenshot evidence index](docs/05-conditional-access-saml/EVIDENCE-INDEX.md)
 
+### Phase 6 — Azure Key Vault & RBAC
+**Status: Complete ✅**
+
+- Verified Azure RBAC and least-privilege secret access.
+- Confirmed successful test secret retrieval as Frank Castle.
+- Documented 28 evidence screenshots.
+
+**Documentation:** [Phase 6 implementation and results](docs/06-azure-key-vault/README.md)
 ### Upcoming Engineering Areas
 
 - Conditional Access policy design and validation
