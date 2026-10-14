@@ -269,19 +269,39 @@ The successful installation of a client does not prove that authentication, acce
 
 ## 10. Evidence
 
+The following screenshots document the configuration,
+troubleshooting and validation performed during Phase 7.
 
-
-Thirty screenshots document the configuration, troubleshooting and validation activities.
-
-
-
-Evidence files are stored alongside this README as `phase7\_01.png` through `phase7\_30.png`.
-
-
-
-The screenshots demonstrate the engineering process, including configuration changes, errors, troubleshooting and successful hybrid device registration.
-
-
+- [Screenshot 01](evidence/phase7_01.png)
+- [Screenshot 02](evidence/phase7_02.png)
+- [Screenshot 03](evidence/phase7_03.png)
+- [Screenshot 04](evidence/phase7_04.png)
+- [Screenshot 05](evidence/phase7_05.png)
+- [Screenshot 06](evidence/phase7_06.png)
+- [Screenshot 07](evidence/phase7_07.png)
+- [Screenshot 08](evidence/phase7_08.png)
+- [Screenshot 09](evidence/phase7_09.png)
+- [Screenshot 10](evidence/phase7_10.png)
+- [Screenshot 11](evidence/phase7_11.png)
+- [Screenshot 12](evidence/phase7_12.png)
+- [Screenshot 13](evidence/phase7_13.png)
+- [Screenshot 14](evidence/phase7_14.png)
+- [Screenshot 15](evidence/phase7_15.png)
+- [Screenshot 16](evidence/phase7_16.png)
+- [Screenshot 17](evidence/phase7_17.png)
+- [Screenshot 18](evidence/phase7_18.png)
+- [Screenshot 19](evidence/phase7_19.png)
+- [Screenshot 20](evidence/phase7_20.png)
+- [Screenshot 21](evidence/phase7_21.png)
+- [Screenshot 22](evidence/phase7_22.png)
+- [Screenshot 23](evidence/phase7_23.png)
+- [Screenshot 24](evidence/phase7_24.png)
+- [Screenshot 25](evidence/phase7_25.png)
+- [Screenshot 26](evidence/phase7_26.png)
+- [Screenshot 27](evidence/phase7_27.png)
+- [Screenshot 28](evidence/phase7_28.png)
+- [Screenshot 29](evidence/phase7_29.png)
+- [Screenshot 30](evidence/phase7_30.png)
 
 ## 11. Engineering Outcome
 
@@ -296,6 +316,7 @@ The Global Secure Access client was deployed successfully. Authentication and Pr
 
 
 **Next engineering areas:** Complete Global Secure Access validation, continue Microsoft Entra ID Governance, and implement Privileged Identity Management (PIM).
+
 
 
 
