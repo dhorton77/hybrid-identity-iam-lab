@@ -1,16 +1,16 @@
-\# Phase 7 — Global Secure Access \& Hybrid Microsoft Entra Join
+# Phase 7 — Global Secure Access & Hybrid Microsoft Entra Join
 
 
 
-\*\*Lab dates:\*\* 13–14 October 2026  
+**Lab dates:** 13–14 October 2026  
 
-\*\*Status:\*\* Partially validated — Global Secure Access authentication testing ongoing  
+**Status:** Partially validated — Global Secure Access authentication testing ongoing  
 
-\*\*Evidence:\*\* 30 screenshots
+**Evidence:** 30 screenshots
 
 
 
-\## 1. Objective
+## 1. Objective
 
 
 
@@ -22,7 +22,7 @@ The objective is to demonstrate device identity management, hybrid synchronizati
 
 
 
-\## 2. Lab Environment
+## 2. Lab Environment
 
 
 
@@ -50,7 +50,7 @@ The objective is to demonstrate device identity management, hybrid synchronizati
 
 
 
-\## 3. Hybrid Microsoft Entra Join
+## 3. Hybrid Microsoft Entra Join
 
 
 
@@ -62,17 +62,17 @@ Engineering activities included:
 
 
 
-\- Reviewing synchronization scope and organizational unit filtering.
+- Reviewing synchronization scope and organizational unit filtering.
 
-\- Configuring Hybrid Microsoft Entra Join through the Entra Connect wizard.
+- Configuring Hybrid Microsoft Entra Join through the Entra Connect wizard.
 
-\- Configuring the Active Directory Service Connection Point (SCP).
+- Configuring the Active Directory Service Connection Point (SCP).
 
-\- Synchronizing the Windows computer objects.
+- Synchronizing the Windows computer objects.
 
-\- Running the Windows Automatic Device Join scheduled task.
+- Running the Windows Automatic Device Join scheduled task.
 
-\- Validating device registration in Microsoft Entra ID.
+- Validating device registration in Microsoft Entra ID.
 
 
 
@@ -80,7 +80,7 @@ Both Windows 11 endpoints were successfully registered as hybrid-joined devices.
 
 
 
-\## 4. Active Directory Secure Channel Troubleshooting
+## 4. Active Directory Secure Channel Troubleshooting
 
 
 
@@ -108,11 +108,11 @@ Following remediation, both devices successfully validated their secure channel 
 
 
 
-\*\*Engineering outcome:\*\* Restored trusted communication between the domain-joined Windows endpoints and Active Directory.
+**Engineering outcome:** Restored trusted communication between the domain-joined Windows endpoints and Active Directory.
 
 
 
-\## 5. Device Identity Validation
+## 5. Device Identity Validation
 
 
 
@@ -154,7 +154,7 @@ They do not independently establish successful user Primary Refresh Token acquis
 
 
 
-\## 6. Global Secure Access Client Deployment
+## 6. Global Secure Access Client Deployment
 
 
 
@@ -166,17 +166,17 @@ Deployment activities included:
 
 
 
-\- Verifying internet connectivity.
+- Verifying internet connectivity.
 
-\- Confirming domain controller connectivity.
+- Confirming domain controller connectivity.
 
-\- Downloading the Windows client installer.
+- Downloading the Windows client installer.
 
-\- Installing the Global Secure Access client.
+- Installing the Global Secure Access client.
 
-\- Restarting the endpoint.
+- Restarting the endpoint.
 
-\- Reviewing client authentication status.
+- Reviewing client authentication status.
 
 
 
@@ -184,7 +184,7 @@ The client was installed successfully, but user authentication was not yet valid
 
 
 
-\## 7. Authentication Troubleshooting
+## 7. Authentication Troubleshooting
 
 
 
@@ -212,15 +212,15 @@ The investigation also examined differences between on-premises and cloud creden
 
 
 
-\*\*Outstanding validation:\*\* Confirm successful user authentication, PRT acquisition and Global Secure Access traffic forwarding.
+**Outstanding validation:** Confirm successful user authentication, PRT acquisition and Global Secure Access traffic forwarding.
 
 
 
-\## 8. Security Principles
+## 8. Security Principles
 
 
 
-\### Zero Trust
+### Zero Trust
 
 
 
@@ -228,7 +228,7 @@ Device registration is one component of a Zero Trust strategy. Access should be 
 
 
 
-\### Defence in Depth
+### Defence in Depth
 
 
 
@@ -236,7 +236,7 @@ The lab combines Active Directory, Microsoft Entra ID, hybrid device registratio
 
 
 
-\### Least Privilege
+### Least Privilege
 
 
 
@@ -244,7 +244,7 @@ Administrative credentials were used for required configuration and repair opera
 
 
 
-\### Validate Rather Than Assume
+### Validate Rather Than Assume
 
 
 
@@ -252,7 +252,7 @@ The successful installation of a client does not prove that authentication, acce
 
 
 
-\## 9. Validation Summary
+## 9. Validation Summary
 
 
 
@@ -282,7 +282,7 @@ The successful installation of a client does not prove that authentication, acce
 
 
 
-\## 10. Evidence
+## 10. Evidence
 
 
 
@@ -298,7 +298,7 @@ The screenshots demonstrate the engineering process, including configuration cha
 
 
 
-\## 11. Engineering Outcome
+## 11. Engineering Outcome
 
 
 
@@ -310,5 +310,6 @@ The Global Secure Access client was deployed successfully. Authentication and Pr
 
 
 
-\*\*Next engineering areas:\*\* Complete Global Secure Access validation, continue Microsoft Entra ID Governance, and implement Privileged Identity Management (PIM).
+**Next engineering areas:** Complete Global Secure Access validation, continue Microsoft Entra ID Governance, and implement Privileged Identity Management (PIM).
+
 
