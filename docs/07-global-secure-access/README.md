@@ -22,33 +22,28 @@ The objective is to demonstrate device identity management, hybrid synchronizati
 
 
 
-## 2. Lab Environment
+## 2. Infrastructure Overview
 
+### Active Directory and Identity
 
+- **Domain Controller:** SC300-DC01
+- **Active Directory Domain:** ad.sc300lab.test
+- **Domain Controller IP:** 192.168.1.3
+- **Microsoft Entra Connect Server:** SC300-SYNC01
 
-| Component | Configuration |
+### Windows 11 Endpoints
 
-|---|---|
+- **SC300-PC01:** Domain-joined Windows 11 workstation
+- **SC300-PC02:** Domain-joined Windows 11 workstation
+- **Device Identity:** Hybrid Microsoft Entra joined
 
-| Domain controller | SC300-DC01 |
+### Network and Security
 
-| Active Directory domain | ad.sc300lab.test |
-
-| Domain controller IP | 192.168.1.3 |
-
-| Synchronization server | SC300-SYNC01 |
-
-| Endpoint 1 | SC300-PC01 — Windows 11 |
-
-| Endpoint 2 | SC300-PC02 — Windows 11 |
-
-| Firewall | IPFire — 192.168.1.2 |
-
-| Cloud identity | Microsoft Entra ID |
-
-| Endpoint connectivity | Global Secure Access Windows client |
-
-
+- **Firewall:** IPFire
+- **Firewall IP:** 192.168.1.2
+- **Internal Network:** Private Hyper-V Green Zone
+- **Cloud Identity:** Microsoft Entra ID
+- **Security Architecture:** Zero Trust and least privilege
 
 ## 3. Hybrid Microsoft Entra Join
 
@@ -307,6 +302,7 @@ The Global Secure Access client was deployed successfully. Authentication and Pr
 
 
 **Next engineering areas:** Complete Global Secure Access validation, continue Microsoft Entra ID Governance, and implement Privileged Identity Management (PIM).
+
 
 
 
