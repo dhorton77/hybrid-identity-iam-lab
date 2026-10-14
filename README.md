@@ -35,7 +35,7 @@ Failures and troubleshooting are intentionally retained where they demonstrate u
                   SC300-DC01
               Active Directory / DNS
                ad.sc300lab.test
-                  192.168.1.2
+                  192.168.1.3
                     /       \
                    /         \
              SC300-PC01    SC300-PC02
@@ -43,7 +43,7 @@ Failures and troubleshooting are intentionally retained where they demonstrate u
                    \         /
                     \       /
                      IPFire
-                   192.168.1.1
+                   192.168.1.2
 ```
 
 ### Identity Design
@@ -52,7 +52,7 @@ Failures and troubleshooting are intentionally retained where they demonstrate u
 |---|---|
 | Active Directory forest | `ad.sc300lab.test` |
 | Domain Controller | `SC300-DC01` |
-| Domain Controller IP | `192.168.1.2` |
+| Domain Controller IP | `192.168.1.3` |
 | Entra Connect Server | `SC300-SYNC01` |
 | Windows clients | `SC300-PC01`, `SC300-PC02` |
 | Hybrid identity OU | `Hybrid-Users` |
@@ -285,6 +285,31 @@ Implemented identity-based secret access using Microsoft Entra ID and Azure role
 [View Phase 6 — Azure Key Vault & RBAC](docs/06-azure-key-vault/README.md) · [View screenshot evidence index](docs/06-azure-key-vault/EVIDENCE-INDEX.md)
 
 ---
+## Phase 7 — Global Secure Access & Hybrid Device Identity 🧪
+
+Extended the hybrid IAM environment with Microsoft Entra
+Hybrid Join and Global Secure Access client deployment.
+
+### Key Engineering Work
+
+- Configured Hybrid Microsoft Entra Join.
+- Updated Entra Connect OU synchronization scope.
+- Repaired broken Active Directory secure channels on PC01 and PC02.
+- Verified successful synchronization of both computer objects.
+- Confirmed Hybrid Entra Join on both Windows 11 clients.
+- Validated TPM-protected device authentication.
+- Installed Global Secure Access Client on PC01.
+- Verified internet, DNS and domain controller connectivity.
+- Investigated Global Secure Access authentication and missing PRT.
+- Captured 30 screenshots documenting implementation and troubleshooting.
+
+**Validation:** Hybrid Join completed successfully on both
+devices. Global Secure Access user authentication and
+Private Access connectivity remain under investigation.
+
+[View Phase 7 — Global Secure Access](docs/07-global-secure-access/README.md)
+
+---
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -436,6 +461,17 @@ The objective is to build on existing enterprise engineering experience and appl
 - Documented 28 evidence screenshots.
 
 **Documentation:** [Phase 6 implementation and results](docs/06-azure-key-vault/README.md)
+### Phase 7 — Global Secure Access & Hybrid Device Identity
+**Status: Hybrid Join validated; Global Secure Access authentication testing ongoing 🧪**
+
+- Confirmed Hybrid Microsoft Entra Join on PC01 and PC02.
+- Repaired Active Directory secure channels.
+- Installed the Global Secure Access client.
+- Documented 30 screenshots.
+- Global Secure Access user authentication and traffic forwarding remain to be validated.
+
+**Documentation:** [Phase 7 implementation and evidence](docs/07-global-secure-access/README.md)
+
 ### Upcoming Engineering Areas
 
 - Conditional Access policy design and validation
@@ -507,3 +543,7 @@ Domain Authentication
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
 Phase 4 extends this foundation to automated application entitlements. Phase 5 adds SAML SSO, MFA testing, emergency access validation, and Conditional Access Report-only evaluation. Enforced Conditional Access remains to be validated; later work includes deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
+
+
+
+
