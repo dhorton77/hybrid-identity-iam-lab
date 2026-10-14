@@ -254,33 +254,18 @@ The successful installation of a client does not prove that authentication, acce
 
 ## 9. Validation Summary
 
-
-
 | Test | Outcome |
-
 |---|---|
-
 | Active Directory secure channel repair | Passed |
-
 | Entra Connect hybrid device configuration | Completed |
-
 | PC01 Hybrid Microsoft Entra Join | Passed |
-
 | PC02 Hybrid Microsoft Entra Join | Passed |
-
 | Device authentication status | Passed |
-
 | TPM protection status | Confirmed |
-
 | Global Secure Access client installation | Passed |
-
 | Global Secure Access user authentication | Not yet validated |
-
 | User Primary Refresh Token | Not acquired in tested session |
-
 | Private Access connectivity | Not yet validated |
-
-
 
 ## 10. Evidence
 
@@ -311,5 +296,6 @@ The Global Secure Access client was deployed successfully. Authentication and Pr
 
 
 **Next engineering areas:** Complete Global Secure Access validation, continue Microsoft Entra ID Governance, and implement Privileged Identity Management (PIM).
+
 
 
