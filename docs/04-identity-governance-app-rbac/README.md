@@ -123,3 +123,9 @@ Recommended follow-up: build a small single-tenant OpenID Connect application, c
 The `evidence/` directory also contains earlier configuration screenshots from the same lab session. All 36 files are retained for reference; the images above are the core evidence supporting this case study.
 
 **Publication check:** Review every screenshot for visible account names, tenant domains, IDs, email addresses, and other information you do not want in a public repository. Header redaction alone is not a complete privacy review.
+
+---
+
+## Screenshot evidence index
+
+[Browse the numbered screenshot evidence links](./EVIDENCE-INDEX.md) · [Open the separate evidence folder](./evidence/)
