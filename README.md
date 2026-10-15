@@ -327,7 +327,7 @@ Implemented Microsoft Entra Entitlement Management to control Finance access thr
 
 **Validation:** Access requests, approval, provisioning and revocation were tested successfully. Periodic access review settings were configured; a full monthly review cycle was not tested.
 
-[View Phase 8 — Microsoft Entra ID Governance](docs/08-entra-identity-governance/README.md)
+[View Phase 8 — Microsoft Entra ID Governance](docs/08-entra-identity-governance/README.md) · [View 42 screenshot evidence links](docs/08-entra-identity-governance/EVIDENCE-INDEX.md)
 
 ---
 # Engineering Approach
@@ -501,7 +501,7 @@ The objective is to build on existing enterprise engineering experience and appl
 - Validated entitlement revocation and removal of group membership.
 - Documented 42 screenshots.
 
-**Documentation:** [Phase 8 implementation and evidence](docs/08-entra-identity-governance/README.md)
+**Documentation:** [Phase 8 implementation and evidence](docs/08-entra-identity-governance/README.md) · [Screenshot evidence index](docs/08-entra-identity-governance/EVIDENCE-INDEX.md)
 ### Upcoming Engineering Areas
 
 - Conditional Access policy design and validation
