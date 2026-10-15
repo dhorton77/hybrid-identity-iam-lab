@@ -100,7 +100,7 @@ Built and validated the on-premises identity foundation required for the hybrid 
 - Validated Active Directory secure channels.
 - Captured implementation and troubleshooting evidence.
 
-[View Phase 1 — On-Premises Active Directory Foundation](docs/01-on-prem-ad-foundation/README.md)
+[View Phase 1 — On-Premises Active Directory Foundation](docs/01-on-prem-ad-foundation/README.md) · [Screenshot evidence index](docs/01-on-prem-ad-foundation/EVIDENCE-INDEX.md)
 
 ---
 
@@ -148,7 +148,7 @@ Microsoft Entra ID
 Microsoft Authenticator / MFA
 ```
 
-[View Phase 2 — Hybrid Identity & Microsoft Entra Connect](docs/02-hybrid-identity-entra-connect/README.md)
+[View Phase 2 — Hybrid Identity & Microsoft Entra Connect](docs/02-hybrid-identity-entra-connect/README.md) · [Screenshot evidence index](docs/02-hybrid-identity-entra-connect/EVIDENCE-INDEX.md)
 
 ---
 
@@ -199,7 +199,7 @@ On-Premises Active Directory
 Domain Authentication
 ```
 
-[View Phase 3 — SSPR & Password Writeback](docs/03-sspr-password-writeback/README.md)
+[View Phase 3 — SSPR & Password Writeback](docs/03-sspr-password-writeback/README.md) · [Screenshot evidence index](docs/03-sspr-password-writeback/EVIDENCE-INDEX.md)
 
 ---
 
@@ -244,7 +244,7 @@ Department change out of Finance
 
 **Scope of validation:** Entra group membership and application role *entitlements* were verified. A working Finance Portal, in-app role enforcement, sign-in denial, and active token/session revocation have **not** yet been tested.
 
-[View Phase 4 — Identity Governance & Application RBAC](docs/04-identity-governance-app-rbac/README.md)
+[View Phase 4 — Identity Governance & Application RBAC](docs/04-identity-governance-app-rbac/README.md) · [Screenshot evidence index](docs/04-identity-governance-app-rbac/EVIDENCE-INDEX.md)
 
 ---
 
@@ -307,7 +307,7 @@ Hybrid Join and Global Secure Access client deployment.
 devices. Global Secure Access user authentication and
 Private Access connectivity remain under investigation.
 
-[View Phase 7 — Global Secure Access](docs/07-global-secure-access/README.md)
+[View Phase 7 — Global Secure Access](docs/07-global-secure-access/README.md) · [Screenshot evidence index](docs/07-global-secure-access/EVIDENCE-INDEX.md)
 
 ---
 ## Phase 8 — Microsoft Entra ID Governance ✅
