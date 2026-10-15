@@ -116,3 +116,9 @@ The Active Directory environment was designed around least privilege, controlled
 - DNS, LDAP SRV records, SYSVOL, NETLOGON, FSMO roles, and SPNs were validated rather than assuming successful configuration.
 
 This provides the on-premises identity foundation that will later be extended into Microsoft Entra ID for hybrid identity, Conditional Access, privileged access management, identity lifecycle management, and Zero Trust testing.
+
+---
+
+## Screenshot evidence index
+
+[Browse the numbered screenshot evidence links](./EVIDENCE-INDEX.md) · [Open the separate evidence folder](./evidence/)
