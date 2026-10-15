@@ -310,6 +310,26 @@ Private Access connectivity remain under investigation.
 [View Phase 7 — Global Secure Access](docs/07-global-secure-access/README.md)
 
 ---
+## Phase 8 — Microsoft Entra ID Governance ✅
+
+Implemented Microsoft Entra Entitlement Management to control Finance access through approval-based provisioning, time-limited assignments and access reviews.
+
+### Key Engineering Work
+
+- Created `Finance-Access-Package` with the `SG-Finance-Governance` security group.
+- Configured access request eligibility and an approval workflow.
+- Tested access requests using Frank Castle and approval by David-User.
+- Verified successful entitlement assignment and Finance group membership.
+- Configured 30-day access expiration.
+- Configured monthly access reviews with a 7-day review window.
+- Tested entitlement revocation and confirmed removal of Finance group membership.
+- Captured 42 screenshots documenting configuration and validation.
+
+**Validation:** Access requests, approval, provisioning and revocation were tested successfully. Periodic access review settings were configured; a full monthly review cycle was not tested.
+
+[View Phase 8 — Microsoft Entra ID Governance](docs/08-entra-identity-governance/README.md)
+
+---
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
@@ -472,6 +492,16 @@ The objective is to build on existing enterprise engineering experience and appl
 
 **Documentation:** [Phase 7 implementation and evidence](docs/07-global-secure-access/README.md)
 
+### Phase 8 — Microsoft Entra ID Governance
+**Status: Complete — access provisioning and revocation validated ✅**
+
+- Implemented approval-based Finance access provisioning.
+- Verified access package assignment and group membership.
+- Configured 30-day access expiration and monthly access reviews.
+- Validated entitlement revocation and removal of group membership.
+- Documented 42 screenshots.
+
+**Documentation:** [Phase 8 implementation and evidence](docs/08-entra-identity-governance/README.md)
 ### Upcoming Engineering Areas
 
 - Conditional Access policy design and validation
@@ -543,7 +573,3 @@ Domain Authentication
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
 Phase 4 extends this foundation to automated application entitlements. Phase 5 adds SAML SSO, MFA testing, emergency access validation, and Conditional Access Report-only evaluation. Enforced Conditional Access remains to be validated; later work includes deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
-
-
-
-
