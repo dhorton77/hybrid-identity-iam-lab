@@ -224,3 +224,9 @@ A successful implementation requires the identity, authentication method, SSPR p
 The most important validation was therefore not the green success message in Microsoft Entra.
 
 It was proving that a password created through cloud SSPR could ultimately authenticate the same synchronized identity against the on-premises Active Directory domain.
+
+---
+
+## Screenshot evidence index
+
+[Browse the numbered screenshot evidence links](./EVIDENCE-INDEX.md) · [Open the separate evidence folder](./evidence/)
