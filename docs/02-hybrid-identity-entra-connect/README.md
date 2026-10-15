@@ -690,4 +690,8 @@ Building the environment demonstrated how DNS, Active Directory, UPN design, Mic
 
 That end-to-end understanding is the foundation for the later IAM and PAM phases of this project.
 
+---
 
+## Screenshot evidence index
+
+[Browse the numbered screenshot evidence links](./EVIDENCE-INDEX.md) · [Open the separate evidence folder](./evidence/)
