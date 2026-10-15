@@ -245,3 +245,9 @@ Phase 7 established Hybrid Microsoft Entra Join on two Windows 11 endpoints, res
 A private IIS test application was configured through Quick Access, with named-user assignment and **actual tunneled TCP traffic** demonstrated in the PC01 diagnostics.
 
 **Next engineering areas:** Microsoft Entra ID Governance and Privileged Identity Management (PIM).
+
+---
+
+## Screenshot evidence index
+
+[Browse the numbered screenshot evidence links](./EVIDENCE-INDEX.md) · [Open the separate evidence folder](./evidence/)
