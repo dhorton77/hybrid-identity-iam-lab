@@ -330,6 +330,27 @@ Implemented Microsoft Entra Entitlement Management to control Finance access thr
 [View Phase 8 — Microsoft Entra ID Governance](docs/08-entra-identity-governance/README.md) · [View 42 screenshot evidence links](docs/08-entra-identity-governance/EVIDENCE-INDEX.md)
 
 ---
+
+## Phase 9 — Privileged Identity Management (PIM) ✅
+
+Implemented and validated Microsoft Entra Privileged Identity Management to provide controlled Just-in-Time (JIT) access to the User Administrator role.
+
+### Key Engineering Work
+
+- Assigned Frank Castle permanent **eligibility**, without permanent active privileges.
+- Configured a two-hour maximum activation duration, MFA requirement and mandatory justification.
+- Required approval from a named approver before role activation.
+- Submitted and approved an activation request with a ticket reference.
+- Verified successful User Administrator activation and PIM audit events.
+- Reviewed sign-in logs showing the MFA requirement satisfied by an existing token claim.
+- Manually deactivated the role and confirmed the eligible assignment remained available.
+- Captured 27 screenshots documenting the privileged access lifecycle.
+
+**Validation:** The eligible → requested → approved → activated → audited → deactivated → eligible lifecycle was demonstrated. Automatic two-hour expiry and a fresh MFA prompt at activation were not independently validated.
+
+[View Phase 9 — Privileged Identity Management](docs/09-privileged-identity-management/README.md) · [View 27 screenshot evidence links](docs/09-privileged-identity-management/EVIDENCE-INDEX.md)
+
+---
 # Engineering Approach
 
 The project follows several security principles throughout the environment.
