@@ -1,71 +1,180 @@
 # Phase 9 — Privileged Identity Management (PIM)
 
 **Lab date:** 16 October 2026  
-**Status:** Complete — eligible assignment, approval, activation, auditing and manual deactivation validated  
-**Test identity:** Frank Castle  
-**Role:** Microsoft Entra User Administrator  
-**Scope:** Default Directory
+**Status:** Complete — eligibility, approval, activation, auditing and manual deactivation validated  
+**Evidence:** 27 screenshots
 
 ## 1. Objective
 
-Demonstrate Just-in-Time (JIT) privileged access using Microsoft Entra Privileged Identity Management (PIM), with controlled elevation, approval, authentication requirements, a time limit, and traceable audit events.
+Implement and test Microsoft Entra Privileged Identity Management (PIM) to provide Just-in-Time (JIT) access to an administrative role without maintaining continuous elevated permissions.
 
-## 2. Configuration
+This phase demonstrates approval-based privilege elevation, scoped administrative access, time-limited activation, accountability through justification and ticket references, and an auditable return to eligible status.
 
-| Control | Lab setting |
+## 2. Lab Environment
+
+| Component | Configuration |
 |---|---|
-| Role | User Administrator |
-| Eligible principal | Frank Castle |
-| Eligible assignment | Permanent eligibility (not standing privilege) |
-| Maximum activation | 2 hours |
-| Activation authentication | Azure MFA |
+| Identity platform | Microsoft Entra ID |
+| Privileged access solution | Microsoft Entra Privileged Identity Management (PIM) |
+| Directory scope | Default Directory |
+| Privileged role | User Administrator |
+| Test identity | Frank Castle |
+| Named approver | David Horton |
+| Assignment type | Permanently eligible; not permanently active |
+| Maximum activation duration | 2 hours |
+| Activation authentication requirement | Azure MFA |
 | Justification | Required |
 | Approval | Required |
-| Named approver | David Horton |
 | Request reference | LAB-PIM-009 |
 | Ticket system | SC300-IAM-LAB |
 
-The test identity was made **eligible**, not permanently active. PIM policy changes were saved before testing the activation flow.
+## 3. Privileged Role Policy Configuration
 
-## 3. Implementation and Validation
+Reviewed existing role assignments and the User Administrator role settings before changing the activation policy.
 
-1. Inspected existing active role assignments and the User Administrator role settings.
-2. Changed maximum activation duration from eight to two hours.
-3. Required MFA, a written justification and approval, and selected a named approver.
-4. Added Frank Castle as an eligible User Administrator.
-5. Submitted an activation request with a lab ticket reference and business justification.
-6. Confirmed that the request entered the approval workflow.
-7. Approved the request using the designated approver account.
-8. Verified that the User Administrator role appeared as **Activated** under Frank's active assignments.
-9. Inspected the PIM resource audit: eligible assignment, settings update, request, approval and activation completed successfully.
-10. Reviewed a related Entra interactive sign-in event and its MFA requirement.
-11. Manually deactivated the role before the two-hour activation period elapsed.
-12. Verified successful deactivation and that the User Administrator role returned to **Eligible assignments** with an **Activate** action.
+Engineering activities included:
 
-## 4. MFA Validation Boundary
+- Reduced the maximum activation duration from eight hours to two hours.
+- Required MFA to satisfy the authentication requirement for activation.
+- Required a written business justification.
+- Enabled approval before privileged activation.
+- Selected a named approver and saved the policy changes.
 
-The sign-in record displayed **Authentication requirement: Multifactor authentication**, **Status: Success**, and **MFA requirement satisfied by claim in the token**. This supports MFA satisfaction for the observed sign-in, but does **not** prove a fresh MFA prompt was issued at the moment of PIM activation.
+**Result:** The User Administrator activation policy was configured for approval-based, time-limited elevation.
 
-## 5. Security Engineering Outcomes
+## 4. Eligible Role Assignment
 
-- **Least privilege:** Elevated permissions were assigned only to the scoped User Administrator role.
-- **Just-in-Time access:** Eligibility was retained without leaving the role continuously active.
-- **Separation of duties:** A named approver authorised elevation.
-- **Time-bound elevation:** Activation was capped at two hours.
-- **Accountability:** Request justification, ticket reference and audit events were retained.
-- **Revocation:** Manual early deactivation was completed and verified.
+Added Frank Castle to the User Administrator role as an **eligible** principal rather than granting an active standing assignment.
 
-**Important distinction:** Permanent *eligibility* does not mean permanent *active privilege*. The role remains available for a future approved activation.
+Validation included:
 
-## 6. Evidence
+- Reviewing the role's existing active assignments.
+- Configuring and saving the eligible assignment.
+- Confirming the role was available to Frank for activation.
 
-All screenshots are linked individually in the [evidence index](./EVIDENCE-INDEX.md) and stored in the [evidence folder](./evidence/). Original sequence is preserved in chronological filename order.
+**Result:** Frank could request elevated access when required, without holding continuously active User Administrator privileges.
 
-## 7. Final Result
+## 5. Activation Request and Approval Workflow
 
-**Phase 9 completed.** The eligible → requested → approved → activated → audited → deactivated → eligible lifecycle was demonstrated.
+Submitted a privileged activation request using Frank's eligible role assignment.
 
-The screenshots do not independently demonstrate the automatic two-hour expiry mechanism or a new MFA challenge at elevation time; these were not claimed as validated.
+The request included a business justification and the lab ticket details: `LAB-PIM-009` in `SC300-IAM-LAB`.
+
+The designated approver reviewed and approved the request.
+
+**Result:** The request followed the configured approval workflow before activation.
+
+## 6. Privileged Access Activation Validation
+
+Following approval, verified that the User Administrator role appeared as **Activated** under Frank's active assignments.
+
+Validation included:
+
+- Confirming the request and approval states.
+- Reviewing the active role assignment.
+- Checking PIM audit events for the policy change, eligibility, request, approval and activation.
+
+**Result:** The privileged role became active after the approved activation request, with associated audit evidence.
+
+## 7. Authentication and MFA Evidence
+
+Reviewed a related Microsoft Entra interactive sign-in record.
+
+| Sign-in field | Observed result |
+|---|---|
+| Authentication requirement | Multifactor authentication |
+| Status | Success |
+| MFA detail | MFA requirement satisfied by claim in the token |
+
+**Validation boundary:** This confirms the observed sign-in satisfied its MFA requirement. It does **not** establish that a new MFA prompt occurred specifically during PIM activation.
+
+## 8. Manual Deactivation and Return to Eligibility
+
+Manually deactivated the User Administrator role before the configured two-hour maximum elapsed.
+
+Validation included:
+
+- Initiating early deactivation.
+- Reviewing the resulting PIM activity.
+- Confirming the active assignment ended.
+- Verifying the role remained under **Eligible assignments**, with an **Activate** action available for future requests.
+
+**Result:** Active elevated access was removed while the eligible assignment remained intact.
+
+**Validation boundary:** The automatic two-hour expiry was configured but not independently tested; this phase demonstrates manual early deactivation.
+
+## 9. Security Engineering Outcomes
+
+This phase demonstrates:
+
+- Least-privilege assignment of a scoped administrative role.
+- Separation of **eligibility** from **active** privileged access.
+- Approval-based Just-in-Time elevation.
+- MFA policy requirements and evidence-aware sign-in analysis.
+- Two-hour maximum activation policy.
+- Business justification and ticket-based accountability.
+- PIM audit logging and traceability.
+- Manual deactivation and return to eligible status.
+
+**Important distinction:** Permanent eligibility is not permanent active privilege.
+
+## 10. Screenshot Evidence
+
+All **27 evidence screenshots are stored separately** in the [evidence folder](./evidence/). Click a numbered link below to open the original PNG; no screenshots are embedded in this README.
+
+[Full evidence index](./EVIDENCE-INDEX.md) · [Browse evidence folder](./evidence/)
+
+### Role policy and approval configuration
+
+- [01 — PIM role assignments overview](./evidence/01-pim-081724.png)
+- [02 — User Administrator role settings](./evidence/02-pim-081855.png)
+- [03 — Activation policy overview](./evidence/03-pim-081951.png)
+- [04 — Activation policy editing](./evidence/04-pim-082118.png)
+- [05 — Approval configuration](./evidence/05-pim-082605.png)
+- [06 — Named approver selection](./evidence/06-pim-082628.png)
+- [07 — Activation policy review](./evidence/07-pim-082956.png)
+- [08 — Eligible role assignment setup](./evidence/08-pim-092046.png)
+
+### Eligible assignment and activation request
+
+- [09 — Eligibility configuration review](./evidence/09-pim-092106.png)
+- [10 — PIM activation settings](./evidence/10-pim-092618.png)
+- [11 — Activation policy validation](./evidence/11-pim-092947.png)
+- [12 — Eligible assignment confirmation](./evidence/12-pim-093801.png)
+- [13 — Frank's eligible role](./evidence/13-pim-094607.png)
+- [14 — Activation request preparation](./evidence/14-pim-095618.png)
+- [15 — Activation request submitted](./evidence/15-pim-100940.png)
+
+### Approval, activation and audit validation
+
+- [16 — Approval workflow status](./evidence/16-pim-101920.png)
+- [17 — Approver request details](./evidence/17-pim-103501.png)
+- [18 — Approval and activation audit](./evidence/18-pim-103749.png)
+- [19 — Role activation verification](./evidence/19-pim-104805.png)
+- [20 — PIM audit activity](./evidence/20-pim-105054.png)
+- [21 — Audit event details](./evidence/21-pim-110103.png)
+- [22 — Sign-in and MFA verification](./evidence/22-pim-111446.png)
+- [23 — Privileged assignment review](./evidence/23-pim-112728.png)
+
+### Deactivation and return to eligible status
+
+- [24 — Role deactivation initiated](./evidence/24-pim-113231.png)
+- [25 — Deactivation progress](./evidence/25-pim-113353.png)
+- [26 — Deactivation completed](./evidence/26-pim-113421.png)
+- [27 — Eligible assignment restored](./evidence/27-pim-113521.png)
+
+
+---
+
+## 11. Final Validation
+
+The PIM workflow was tested through eligible assignment, activation request, approval, successful role activation, audit review, manual deactivation and return to eligible status.
+
+**Validated:** Approval workflow, role activation, audit trail, manual deactivation and continued eligibility.
+
+**Not independently validated:** Automatic expiry at the two-hour limit or a fresh MFA challenge at the moment of activation.
+
+**Phase 9 status: Complete.**
 
 ---
 
