@@ -502,6 +502,19 @@ The objective is to build on existing enterprise engineering experience and appl
 - Documented 42 screenshots.
 
 **Documentation:** [Phase 8 implementation and evidence](docs/08-entra-identity-governance/README.md) · [Screenshot evidence index](docs/08-entra-identity-governance/EVIDENCE-INDEX.md)
+### Phase 9 — Privileged Identity Management (PIM)
+**Status: Complete — Just-in-Time privileged access validated ✅**
+
+- Configured User Administrator role activation with a two-hour maximum duration.
+- Required MFA, justification and approval.
+- Assigned Frank Castle permanent eligibility without permanent active privileges.
+- Tested the privileged activation request and approval workflow.
+- Verified successful role activation and PIM audit logging.
+- Manually deactivated privileged access.
+- Confirmed the eligible assignment remained available.
+
+**Documentation:** [Phase 9 implementation and results](docs/09-privileged-identity-management/README.md) · [Screenshot evidence index](docs/09-privileged-identity-management/EVIDENCE-INDEX.md)
+
 ### Upcoming Engineering Areas
 
 - Conditional Access policy design and validation
@@ -573,3 +586,4 @@ Domain Authentication
 The first four phases establish a working hybrid identity foundation and demonstrate synchronized identities, cloud authentication, MFA, SSPR, password writeback, dynamic group membership, and inherited application role entitlements.
 
 Phase 4 extends this foundation to automated application entitlements. Phase 5 adds SAML SSO, MFA testing, emergency access validation, and Conditional Access Report-only evaluation. Enforced Conditional Access remains to be validated; later work includes deeper identity governance, privileged access, application security, and automation — progressing from **hybrid identity implementation** toward broader **IAM and PAM engineering**.
+
